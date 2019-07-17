@@ -13,38 +13,62 @@ import edu.whu.system.db.DBUtils;
 
 public class News extends JdbcServicesSupport
 {
-	/*
-	 * title:标题
-	 * text:内容
-	 * 
-	 */
-	public static void setNews(String title,String text,Object...idlist) throws Exception
+	
+	public static void main(String[] args) 
 	{
+		
+		String title = "答辩时间通知";
+		String text = "新的答辩时间已发布,请参与答辩的老师尽快安排自己的空闲时间";
+		int idlist[] = {1,2,5,6,8,9};
+		try 
+		{
+			sendNews(title, text, idlist);
+		} catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+    /**
+     * 
+     * @param title
+     * @param text
+     * @param idlist
+     *    "alluser":所有用户
+	 *    "allstu":所有学生
+	 *    "alltea":所有老师
+	 *    "allexp":所有专家
+	 *    "allsec":所有秘书
+     * @throws Exception
+     */
+	public static void sendNews(String title,String text,Object...idlist) throws Exception
+	{
+		System.out.println(idlist);
 		List<Map<String,String>> lists = null;
 		System.out.println(idlist.toString());
-		if(idlist.toString()=="alluser")
+		if(idlist[0].toString()=="alluser")
 		{
-			String sql = "select uid from user where user.ustate=1";
+			String sql = "select uid from u_r_relation where u_r_state=1";
 			lists= createList(sql);
 		}
-		else if(idlist.toString()=="allstu")
+		else if(idlist[0].toString()=="allstu")
 		{
-			String sql = "select uid from a01 ";
+			String sql = "select uid from u_r_relation where u_r_state=1 and rid='1'";
 			lists= createList(sql);
 		}
-		else if(idlist.toString()=="alltea")
+		else if(idlist[0].toString()=="alltea")
 		{
-			String sql = "select uid from a02 where user.ustate=1";
+			String sql = "select uid from u_r_relation where u_r_state=1 and rid='2'";
 			lists= createList(sql);
 		}
-		else if(idlist.toString()=="allemp")
+		else if(idlist[0].toString()=="allexp")
 		{
-			String sql = "select uid from a03 where user.ustate=1";
+			String sql = "select uid from u_r_relation where u_r_state=1  and rid='3'";
 			lists= createList(sql);
 		}
-		else if(idlist.toString()=="allsec")
+		else if(idlist[0].toString()=="allsec")
 		{
-			String sql = "select uid from a06 where user.ustate=1";
+			String sql = "select uid from u_r_relation where u_r_state=1  and rid='5'";
 			lists= createList(sql);
 		}
 		else 

@@ -50,10 +50,10 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				this.executeUpdate(sql.toString(), args);
 				
 				StringBuilder sql2 = new StringBuilder()
-						.append("insert into b03(uid,b101,b302)")
-						.append("select user.uid,b01.b101,'1'")
-						.append("from user,b01,a01")
-						.append("where user.name=?")
+						.append("insert into b03(uid,b101,b302) ")
+						.append("select user.uid,b01.b101,'1' ")
+						.append("from user,b01,a01 ")
+						.append("where user.name=? ")
 						.append("and b01.uid1=a01.uid ")
 						.append("and a01.a101=? ")
 						;
@@ -65,10 +65,10 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				this.executeUpdate(sql2.toString(), args2);
 				
 				StringBuilder sql3 = new StringBuilder()
-						.append("insert into b03(uid,b101,b302)")
-						.append("select user.uid,b01.b101,'0'")
-						.append("from user,b01,a01")
-						.append("where user.name=?")
+						.append("insert into b03(uid,b101,b302) ")
+						.append("select user.uid,b01.b101,'0' ")
+						.append("from user,b01,a01 ")
+						.append("where user.name=? ")
 						.append("and b01.uid1=a01.uid ")
 						.append("and a01.a101=? ")
 						;
@@ -80,10 +80,10 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				this.executeUpdate(sql3.toString(), args3);
 				
 				StringBuilder sql4 = new StringBuilder()
-						.append("insert into b03(uid,b101,b302)")
-						.append("select user.uid,b01.b101,'0'")
-						.append("from user,b01,a01")
-						.append("where user.name=?")
+						.append("insert into b03(uid,b101,b302) ")
+						.append("select user.uid,b01.b101,'0' ")
+						.append("from user,b01,a01 ")
+						.append("where user.name=? ")
 						.append("and b01.uid1=a01.uid ")
 						.append("and a01.a101=? ")
 						;
@@ -95,10 +95,10 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				this.executeUpdate(sql4.toString(), args4);
 				
 				StringBuilder sql5 = new StringBuilder()
-						.append("insert into b03(uid,b101,b302)")
-						.append("select user.uid,b01.b101,'0'")
-						.append("from user,b01,a01")
-						.append("where user.name=?")
+						.append("insert into b03(uid,b101,b302) ")
+						.append("select user.uid,b01.b101,'0' ")
+						.append("from user,b01,a01 ")
+						.append("where user.name=? ")
 						.append("and b01.uid1=a01.uid ")
 						.append("and a01.a101=? ")
 						;
@@ -111,10 +111,10 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				
 				
 				StringBuilder sql6 = new StringBuilder()
-						.append("insert into b03(uid,b101,b302)")
-						.append("select user.uid,b01.b101,'0'")
-						.append("from user,b01,a01")
-						.append("where user.name=?")
+						.append("insert into b03(uid,b101,b302) ")
+						.append("select user.uid,b01.b101,'0' ")
+						.append("from user,b01,a01 ")
+						.append("where user.name=? ")
 						.append("and b01.uid1=a01.uid ")
 						.append("and a01.a101=? ")
 						;

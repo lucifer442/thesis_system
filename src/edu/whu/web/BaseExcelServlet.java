@@ -38,14 +38,16 @@ import java.util.Map;
 import java.util.UUID;
 
 @WebServlet("*.htms")
-public class BaseExcelServlet extends HttpServlet {
+public class BaseExcelServlet extends HttpServlet 
+{
 	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException 
+	{
 		List<Map<String, Object>> dtos = this.createExcel(request);
 		String toPath = null; // 跳转的目标页面
-		try {
+		try 
+		{
 
 			/************************************************************
 			 * 解析访问路径,获取目标类的名称
@@ -71,7 +73,8 @@ public class BaseExcelServlet extends HttpServlet {
 			/***********************************************************
 			 * 向业务控制器,填充页面数据 i
 			 ***********************************************************/
-			for (Map<String, Object> dto : dtos) {
+			for (Map<String, Object> dto : dtos) 
+			{
 				controller.setDto(dto);
 
 				/***********************************************************
@@ -81,16 +84,20 @@ public class BaseExcelServlet extends HttpServlet {
 				toPath = controller.execute();
 			}
 
-		} catch (Exception ex) {
+		} 
+		catch (Exception ex) 
+		{
 			request.setAttribute("msg", "提示:网络故障!");
 			ex.printStackTrace();
 		}
 		request.getRequestDispatcher("/" + toPath + ".jsp").forward(request, response);
 	}
 
-	private List<Map<String, Object>> createExcel(HttpServletRequest request) {
+	private List<Map<String, Object>> createExcel(HttpServletRequest request)
+	{
 		List<Map<String, Object>> dtos = new ArrayList<Map<String, Object>>();
-		try {
+		try 
+		{
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -110,12 +117,18 @@ public class BaseExcelServlet extends HttpServlet {
 			upload.setSizeMax(1024 * 1024 * 30);
 			String filName = null;
 			String uploadPath = null;
-			try {
+			try
+			{
 				List<FileItem> list = upload.parseRequest(request);
-				for (FileItem fileItem : list) {
-					if (!fileItem.isFormField() && fileItem.getName() != null && !"".equals(fileItem.getName())) {
+				for (FileItem fileItem : list)
+				{
+					if (!fileItem.isFormField() && fileItem.getName() != null && !"".equals(fileItem.getName())) 
+					{
 						filName = fileItem.getName();
-						filName = filName.substring(filName.lastIndexOf("\\"));
+						if(filName.contains("\\"))
+						{
+							filName = filName.substring(filName.lastIndexOf("\\"));
+						}
 						// 获取文件上传目录路径，在项目部署路径下的upload目录里。若想让浏览器不能直接访问到图片，可以放在WEB-INF下
 						uploadPath = request.getSession().getServletContext().getRealPath("/upload");
 						System.out.println(uploadPath + filName);
@@ -126,7 +139,9 @@ public class BaseExcelServlet extends HttpServlet {
 
 					}
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) 
+			{
 				e.printStackTrace();
 			}
 
@@ -157,9 +172,11 @@ public class BaseExcelServlet extends HttpServlet {
 			// 判断获取的工作表（丙机房发射机备件定额）是否为空
 			// 使用工作表之前要检查行对象是否为null，否则会报空指针异常
 			sheet = wb.getSheetAt(0);// 读取下标为0的表(也就是第一张表：sheet1)
-			if (sheet == null) {
+			if (sheet == null) 
+			{
 				System.out.println("工作表0【默认名为 Sheet1 】为空");
-				try {
+				try 
+				{
 					throw new Exception("工作表为空！");
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -181,59 +198,67 @@ public class BaseExcelServlet extends HttpServlet {
 			// 开始一行一行解析---一行解析出来的就是个数组----------全部就是一个list集合
 			// 遍历行
 			List<String> paras = new ArrayList<String>();
-			Map<String, Object> dto=null;
+			Map<String, Object> dto = null;
 
-			for (int j1 = row.getFirstCellNum(); j1 < allCellNum1; j1++) {
+			for (int j1 = row.getFirstCellNum(); j1 < allCellNum1; j1++) 
+			{
 				Cell cell1 = row.getCell(j1);// 获取当前行的单元格
 				paras.add(cell1.toString());
 
 			}
 
-			for (int i2 = 1; i2 <= sheet.getLastRowNum(); i2++) {
-				 dto = new HashMap<>();
+			for (int i2 = 1; i2 <= sheet.getLastRowNum(); i2++) 
+			{
+				dto = new HashMap<>();
 				// 获取当前行
 				row = sheet.getRow(i2);
 
-				if (null == row) {
+				if (null == row) 
+				{
 					// row="";
 					continue;
 				}
 				// 单元格列表
 
-				for (int j1 = row.getFirstCellNum(); j1 < allCellNum1; j1++) {
+				for (int j1 = row.getFirstCellNum(); j1 < allCellNum1; j1++) 
+				{
 					Cell cell2 = row.getCell(j1);// 获取当前行的单元格
 					dto.put(paras.get(j1).toString(), getValue(cell2));
 				}
 				dtos.add(dto);
 			}
-			
+
 			System.out.println(dtos);
-		} catch (Exception ex) {
+		} 
+		catch (Exception ex) 
+		{
 			ex.printStackTrace();
 		}
 		return dtos;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException 
+	{
 		doPost(request, response);
 	}
-	
-	private String getValue(Cell hssfCell)
+
+	private String getValue(Cell hssfCell) 
 	{
 		if (hssfCell.getCellType() == hssfCell.CELL_TYPE_NUMERIC) 
-	    {
-	        // 返回数值类型的值
-			//hssfCell.getNumericCellValue()返回double类型，数目过大会变成科学进制
-	        return toVarchar(hssfCell.getNumericCellValue());
-	    }
+		{
+			// 返回数值类型的值
+			// hssfCell.getNumericCellValue()返回double类型，数目过大会变成科学进制
+			return toVarchar(hssfCell.getNumericCellValue());
+		} 
 		else
-	    {
-	        // 返回字符串类型的值
-	        return String.valueOf(hssfCell.getStringCellValue());
-	    }
-	}	
-	private String toVarchar(double d)
+		{
+			// 返回字符串类型的值
+			return String.valueOf(hssfCell.getStringCellValue());
+		}
+	}
+
+	private String toVarchar(double d) 
 	{
 		BigDecimal bigDecimal = new BigDecimal(d);
 		return bigDecimal.toString();

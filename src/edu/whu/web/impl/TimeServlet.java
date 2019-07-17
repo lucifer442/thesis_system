@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.print.attribute.standard.MediaSize.Other;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.whu.services.impl.TimeSetImpl;
 import edu.whu.system.tools.Tools;
 
 /**
@@ -41,20 +43,21 @@ public class TimeServlet extends HttpServlet {
 			{
 				request.setAttribute("msg", "答辩时间区间设置有误");
 			}
-			if(datesub>7)
+			else if(datesub>7)
 			{
 				request.setAttribute("msg", "答辩时间区间过长");
 			}
-			if(a.before(new Date()));
+			else if(a.before(new Date()))
 			{
 				request.setAttribute("msg", "请设置当前时间之后的时间段");
 			}
-			request.setAttribute("msg", "答辩时间区间为:"+btime+"~"+etime);
+			else
+			{
+				request.setAttribute("msg", "答辩时间区间为:"+btime+"~"+etime);
 				int index =1;
 				Date k = a;
 				for(;index<=datesub;index++)
-				{
-					
+				{	
 					app01.setAttribute("date"+index, Tools.outputDate(k));
 					k=Tools.addDate(k);
 				}
@@ -62,6 +65,9 @@ public class TimeServlet extends HttpServlet {
 				{
 					app01.setAttribute("date"+index, null);
 				}
+				TimeSetImpl ts = new TimeSetImpl();
+			    ts.timeclear();
+			}
 				
 			} 
 			catch (Exception e) 
@@ -69,6 +75,7 @@ public class TimeServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		    
 		    request.getRequestDispatcher("timeManage.jsp").forward(request, response);		
 	}
 

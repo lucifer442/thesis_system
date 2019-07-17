@@ -17,7 +17,8 @@
 
 </head>
 <body>
-<form id="myform" action="<%=path%>/TimeManage.html" method="post">
+<script language="javascript">document.timeform.submit();</script>
+<form id="timeform" action="<%=path%>/TimeManage.html" method="post">
   <!-- 查询条件区 -->
 	<table border="1" width="95%" align="center">
 	  <caption>
