@@ -8,18 +8,15 @@
 <title>论文查询</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script type="text/javascript">
-function onExam(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>/view_Review.html?b101="+b101;
-	 vform.submit();
-}
-function onPreview(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>
-	/view_Reply.html?b101=" + b101;
-		vform.submit();
+window.onload = function() {	
+	var dataList = "${dataList}";
+	var msg = "${msg}";
+	if(dataList==""&&msg=="")
+	{
+		var vform = document.getElementById("myform");
+		vform.action="<%=path%>/sec_Thesis.html";
+			vform.submit();
+		}
 	}
 </script>
 </head>
@@ -54,10 +51,10 @@ function onPreview(b101)
 							style="width: 110px" type="submit">筛选</button>
 						<button class="btn btn-lg btn-primary btn-block"
 							style="width: 110px" type="submit"
-							formaction="<%=path%>/staB01.html">统计</button>
+							formaction="<%=path%>/staB01.html">论文结果统计</button>
 						<button class="btn btn-lg btn-primary btn-block"
 							style="width: 110px" type="submit"
-							formaction="<%=path%>/staB02.html">统计</button>
+							formaction="<%=path%>/staB02.html">评审等级统计</button>
 					</td>
 				</tr>
 			</table>
@@ -67,6 +64,7 @@ function onPreview(b101)
 				<caption>学生论文</caption>
 				<thead>
 					<tr>
+					    <th>姓名</th>
 						<th>标题</th>
 						<th>检查结果</th>
 						<th>评审结果</th>
@@ -76,6 +74,7 @@ function onPreview(b101)
 				<tbody>
 					<c:forEach var="U" items="${dataList}">
 						<tr>
+						    <td>${U.name}</td>
 							<td>${U.b102}</td>
 							<td>${U.b107}</td>
 							<td><c:choose>
@@ -83,7 +82,7 @@ function onPreview(b101)
 										<p>${U.b108}</p>
 									</c:when>
 									<c:otherwise>
-										<a href="#" onclick="onExam('${U.b101}')">${U.b108}</a>
+										<a href="<%=path%>/view_Review.html?b101=${U.b101}">${U.b108}</a>
 									</c:otherwise>
 								</c:choose>
 							</td>
@@ -93,7 +92,7 @@ function onPreview(b101)
 										<p>${U.b109}</p>
 									</c:when> 
 									<c:otherwise>
-										<a href="#" onclick="onExam('${U.b101}')">${U.b109}</a>
+										<a href="<%=path%>/view_Reply.html?b101=${U.b101}">${U.b109}</a>
 									</c:otherwise>
 							</c:choose>
 							</td>

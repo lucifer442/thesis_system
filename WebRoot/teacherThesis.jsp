@@ -8,35 +8,21 @@
 <title>论文查询</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script>
-function onDetails(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>/thesis_Details_Te.html?b101="+b101;
-	 vform.submit();
-}
-function onThesis(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>/view_Thesis.html?b101="+b101;
-	 vform.submit();
-}
-function onExam(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>/view_Review.html?b101="+b101;
-	 vform.submit();
-}
-function onPreview(b101)
-{
-	 var vform = document.getElementById("myform");
-	 vform.action="<%=path%>/view_Reply.html?b101=" + b101;
-	 vform.submit();
-}
+window.onload = function() {	
+	var dataList = "${dataList}";
+	var msg = "${msg}";
+	if(dataList==""&&msg=="")
+	{
+		var vform = document.getElementById("myform");
+		vform.action="<%=path%>/teacher_Thesis.html";
+			vform.submit();
+		}
+	}
 </script>
 </head>
 <body>
-<br>
-<br>
+	<br>
+	<br>
 	<div class="container">
 		<form action="<%=path%>/teacher_Search.html" method="post">
 			<table class="table table-bordered">
@@ -72,6 +58,7 @@ function onPreview(b101)
 			<table class="table table-striped">
 				<thead>
 					<tr>
+					    <th>学生姓名</th>
 						<th>标题</th>
 						<th>导师检查结果</th>
 						<th>评审结果</th>
@@ -82,29 +69,26 @@ function onPreview(b101)
 				<tbody>
 					<c:forEach var="U" items="${dataList}">
 						<tr>
-							<td><a href="#" onclick="onDetails('${U.b101}')">${U.b102}</a></td>
+						    <td>${U.name}</td>
+							<td><a href="<%=path%>/thesis_Details_Te.html?b101=${U.b101}">${U.b102}</a></td>
 							<td>${U.b107}</td>
 							<td><c:choose>
 									<c:when test="${U.b108=='未评审'}">
 										<p>${U.b108}</p>
 									</c:when>
 									<c:otherwise>
-										<a href="#" onclick="onExam('${U.b101}')">${U.b108}</a>
+										<a href="<%=path%>/view_Review.html?b101=${U.b101}">${U.b108}</a>
 									</c:otherwise>
-								</c:choose>
-							</td>
-								<td>
-							<c:choose>
-								<c:when test="${U.b109=='未答辩'}">
+								</c:choose></td>
+							<td><c:choose>
+									<c:when test="${U.b109=='未答辩'}">
 										<p>${U.b109}</p>
-									</c:when> 
+									</c:when>
 									<c:otherwise>
-										<a href="#" onclick="onExam('${U.b101}')">${U.b109}</a>
+										<a href="<%=path%>/view_Reply.html?b101=${U.b101}">${U.b109}</a>
 									</c:otherwise>
-							</c:choose>
-							</td>
-							<td><a href="#" onclick="onThesis('${U.b101}')"
-								target="_blank">在线阅读</a></td>
+								</c:choose></td>
+							<td><a href="<%=path%>/view_Thesis.html?b101=${U.b101}" target="_blank">在线阅读</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>

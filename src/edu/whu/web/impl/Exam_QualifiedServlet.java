@@ -3,13 +3,14 @@ package edu.whu.web.impl;
 import java.util.Map;
 
 import edu.whu.services.impl.B01ImplServices;
-import edu.whu.web.support.B01ControllerSupport;
+import edu.whu.web.support.BaseControllerSupport;
 
-public class Exam_ModifyServlet extends B01ControllerSupport 
+public class Exam_QualifiedServlet extends BaseControllerSupport 
 {
+
 	private B01ImplServices B01ImplServices=new B01ImplServices();
 	
-	public Exam_ModifyServlet() 
+	public Exam_QualifiedServlet()
 	{
 		this.setServices(B01ImplServices);
 	}
@@ -26,7 +27,7 @@ public class Exam_ModifyServlet extends B01ControllerSupport
 		{
 			this.saveAttribute("msg", "没有符合条件的数据！");
 		}
-		return "examExecute";
+		return "examQualified";
 	}
 
 }

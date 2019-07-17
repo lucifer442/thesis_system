@@ -39,6 +39,15 @@ function onSelect()
 			}
 		}
 		localStorage.removeItem('selectID');
+		
+		var dataList = "${dataList}";
+		var msg = "${msg}";
+		if(dataList==""&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/exam_Thesis.html";
+			vform.submit();
+		}
 	}
 </script>
 </head>
@@ -55,6 +64,7 @@ function onSelect()
 				<caption>学生论文</caption>
 				<thead>
 					<tr>
+					    <th>学生姓名</th>
 						<th>标题</th>
 						<th>检查结果</th>
 						<th>评审结果</th>
@@ -64,6 +74,7 @@ function onSelect()
 				<tbody>
 					<c:forEach var="U" items="${dataList}">
 						<tr>
+						    <td>${U.name}</td>
 							<td><a href="#" onclick="onDetails('${U.b101}')">${U.b102}</a></td>
 							<td>${U.b107}</td>
 							<td><c:choose>

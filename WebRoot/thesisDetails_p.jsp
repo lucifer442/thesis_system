@@ -16,6 +16,10 @@
 				<thead></thead>
 				<tbody>
 					<tr>
+				        <th>学生姓名</th>
+				        <td colspan="2">${dataMap.name}</td>
+				    </tr>
+					<tr>
 						<th>标题</th>
 						<td colspan="2">${dataMap.b102}</td>
 					</tr>
@@ -37,7 +41,16 @@
 					</tr>
 					<tr>
 						<th>答辩结果</th>
-						<td><a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b109=='未答辩'}">
+								<p>${dataMap.b109}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>论文</th>

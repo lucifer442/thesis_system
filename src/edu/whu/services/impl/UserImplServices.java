@@ -52,41 +52,4 @@ public class UserImplServices extends JdbcServicesSupport
     	return this.queryForMap(sql.toString(), this.getFromDto("cuid"));
 	}
 	
-	/**
-	 * ²éÕÒÃû×Ö
-	 * @param uid
-	 * @return
-	 * @throws Exception
-	 */
-	public Map<String, String> queryByID(Object uid) throws Exception
-	{
-    	StringBuilder sql=new StringBuilder()
-    			.append("select name")
-    			.append("  from user")
-    			.append(" where uid=?")
-    			;
-    	
-    	return this.queryForMap(sql.toString(), uid);
-	}
-	
-	/**
-	 * µÇÂ¼
-	 * @return
-	 * @throws Exception
-	 */
-	public Map<String, String> Login() throws Exception
-	{
-    	StringBuilder sql=new StringBuilder()
-    			.append("select uid,name")
-    			.append("  from user")
-    			.append(" where uname=? and upassword=?")
-    			;
-
-		Object args[]= {
-				this.getFromDto("uname"),
-				this.getFromDto("upassword")
-		};
-		
-    	return this.queryForMap(sql.toString(), args);
-	}
 }

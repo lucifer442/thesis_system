@@ -1,15 +1,13 @@
 <%@ page language="java" pageEncoding="GBK"%>
 <%@ include file="menu.jsp"%>
 <%@ taglib uri="http://org.wangxg/jsp/extl" prefix="e"%>
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>评审</title>
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<title>给出评语</title>
 </head>
 <body>
-	${msg}
+${msg}
 	<div class="container">
 		<form
 			action="<%=path%>/${empty dataMap?'expert_Add':'expert_Modify'}.html"
@@ -19,13 +17,8 @@
 				<thead></thead>
 				<tbody>
 					<tr>
-						<th>评审等级</th>
-						<td><e:radio name="b202" value="优秀:1,良好:2,合格:3,不合格:4"
-								defval="${dataMap.b202}" /></td>
-					</tr>
-					<tr>
 						<th>评语</th>
-						<td><e:text name="b203" defval="${dataMap.b203}" /></td>
+						<td><e:textarea rows="5" cols="45" name="b203" defval="${dataMap.b203}" /></td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
@@ -35,7 +28,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<!--<input type="hidden" name="uid" value="${dataMap.uid}">-->
 		</form>
 	</div>
 </body>

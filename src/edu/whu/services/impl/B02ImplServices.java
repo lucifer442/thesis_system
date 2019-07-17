@@ -60,11 +60,15 @@ public class B02ImplServices extends JdbcServicesSupport
 				.append("insert into b02(b101,uid,b202,b203)")
 				.append("         values(?,?,?,?)")
 				;
-		
+		Object b202=this.getFromDto("b202");
+		if(!this.isNotNull(b202))
+		{
+			b202=4;
+		}
     	Object args[]={
     			this.getFromDto("b101"),
     			this.getFromDto("uid"),
-    			this.getFromDto("b202"),
+    			b202,
     			this.getFromDto("b203")
     	};
     	
@@ -87,9 +91,13 @@ public class B02ImplServices extends JdbcServicesSupport
 				.append("   set b202=?,b203=?")
 				.append(" where b101=?")
 				;
-		
+		Object b202=this.getFromDto("b202");
+		if(!this.isNotNull(b202))
+		{
+			b202=4;
+		}
 		Object args[]= {
-				this.getFromDto("b202"),
+				b202,
 				this.getFromDto("b203"),
 				this.getFromDto("b101")
 		};

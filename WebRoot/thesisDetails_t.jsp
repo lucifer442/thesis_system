@@ -16,6 +16,10 @@
 				<caption>论文详情</caption>
 				<thead></thead>
 				<tbody>
+				    <tr>
+				        <th>学生姓名</th>
+				        <td colspan="2">${dataMap.name}</td>
+				    </tr>
 					<tr>
 						<th>标题</th>
 						<td colspan="2">${dataMap.b102}</td>
@@ -38,11 +42,29 @@
 					</tr>
 					<tr>
 						<th>评审结果</th>
-						<td><a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b108=='未评审'}">
+								<p>${dataMap.b108}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>答辩结果</th>
-						<td><a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b109=='未答辩'}">
+								<p>${dataMap.b109}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>论文</th>

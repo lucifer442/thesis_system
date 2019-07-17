@@ -10,11 +10,15 @@
 <body>
 	${msg}
 	<div class="container">
-		<form id="myform" action="<%=path%>/exam_Modify.html" method="post">
+		<form id="myform" action="<%=path%>/exam_Unqualified.html" method="post">
 			<table class="table table-bordered">
 				<caption>论文详情</caption>
 				<thead></thead>
 				<tbody>
+				    <tr>
+				        <th>学生姓名</th>
+				        <td colspan="2">${dataMap.name}</td>
+				    </tr>
 					<tr>
 						<th>标题</th>
 						<td colspan="2">${dataMap.b102}</td>
@@ -37,7 +41,16 @@
 					</tr>
 					<tr>
 						<th>评审结果</th>
-						<td><a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b108=='未评审'}">
+								<p>${dataMap.b108}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>论文</th>
@@ -48,9 +61,10 @@
 					<tr>
 						<td colspan="3" align="center">
 							<button class="btn btn-lg btn-primary btn-block"
-								style="width: 110px" type="submit" name="b108" value="1" value=>通过</button>
+								style="width: 110px" type="submit" name="b108" value="1"
+								formaction="<%=path%>/exam_Qualified.html">通过</button>
 							<button class="btn btn-lg btn-primary btn-block"
-								style="width: 110px" type="submit" name="b108" value="2" value=>不通过</button>
+								style="width: 110px" type="submit" name="b108" value="2" >不通过</button>
 							<input type="hidden" name="b101" value="${dataMap.b101}">
 						</td>
 					</tr>

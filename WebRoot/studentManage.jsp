@@ -37,11 +37,29 @@
 					</tr>
 					<tr>
 						<th>ÆÀÉó½á¹û</th>
-						<td><a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b108=='Î´ÆÀÉó'}">
+								<p>${dataMap.b108}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Review.html?b101=${dataMap.b101}">${dataMap.b108}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>´ğ±ç½á¹û</th>
-						<td><a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a></td>
+						<td>
+						<c:choose>
+							<c:when test="${dataMap.b109=='Î´´ğ±ç'}">
+								<p>${dataMap.b109}</p>
+							</c:when>
+							<c:otherwise>
+								<a href="<%=path%>/view_Reply.html?b101=${dataMap.b101}">${dataMap.b109}</a>
+							</c:otherwise>
+						</c:choose>
+						</td>
 					</tr>
 					<tr>
 						<th>ÂÛÎÄ</th>
