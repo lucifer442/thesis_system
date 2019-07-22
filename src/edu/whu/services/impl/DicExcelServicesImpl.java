@@ -12,11 +12,13 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 		boolean tag = false;
 			DBUtils.beginTransaction();
 			try {
-
+				String sql0 = "delete from b03 where b03.b101 in (select b01.b101 from b01,a01 where b01.uid1=a01.uid and a01.a101=?)";
+				this.executeUpdate(sql0.toString(), this.getFromDto("学号"));
+				
 				// 1.编写SQL语句
 				StringBuilder sql = new StringBuilder()
-						.append("insert into b04(b101,user06,b402,b403,b404,b405,b406,b407,b408,b409,b410) ")
-						.append("select b01.b101, a03.uid,?,?,?,?,?,?,?,?,?")
+						.append("replace into b04(b101,user06,b402,b403,b404,b405,b406,b407,b408,b409,b410) ")
+						.append("select b01.b101, a03.uid,?,?,?,?,?,?,?,?,? ")
 						.append("from b01 ,a01, a03, user ")
 						.append("where a01.uid=b01.uid1 ")
 						.append("and user.uid = a03.uid ")
@@ -30,13 +32,28 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 						this.getFromDto("良好"), 
 						this.getFromDto("合格"), 
 						this.getFromDto("不合格"),
+						" ",
 						this.getFromDto("同意授予"), 
 						this.getFromDto("同意重新答辩"), 
-						" ",
 						this.getFromDto("答辩秘书"), 
-						this.getFromDto("学号")
+						this.getFromDto("学号"),
 				};
 				this.executeUpdate(sql.toString(), args);
+				
+				String qsql = "select b01.b101 from b01 ,a01 where a01.uid=b01.uid1 and a01.a101=? ";
+				Map<String,String> map = this.queryForMap(qsql, this.getFromDto("学号"));
+				int unpass = Integer.parseInt(this.getFromDto("不合格").toString());
+				System.out.println("pass = "+unpass);
+				if(unpass>=2)
+				{
+					String sqlp = "update b01 set b01.b109='2' where b01.b101=?";
+					this.executeUpdate(sqlp.toString(),map.get("b101"));
+				}
+				else
+				{
+					String sqlp = "update b01 set b01.b109='1' where b01.b101=?";
+					this.executeUpdate(sqlp.toString(),map.get("b101"));
+				}
 				
 				StringBuilder sql2 = new StringBuilder()
 						.append("insert into b03(uid,b101,b302) ")

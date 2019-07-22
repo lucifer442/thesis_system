@@ -10,21 +10,10 @@ import edu.whu.system.tools.Tools;
 
 public class StuExcelServiceImpl extends JdbcServicesSupport 
 {
-	public boolean update(String utype) throws Exception 
-    {
-    	if(utype.equalsIgnoreCase("addEmp"))
-    	{
-    		return this.addEmp();
-    	}
-    	else
-    	{
-    		throw new Exception("在类[ Ab01ServicesImpl ]中进行了未定义的动作调用,动作名称是  "+utype);
-    	}	
-    }
     
     public boolean addEmp()throws Exception
     {
-    	String username = Tools.getFormatNumber("2","T");
+    	String username = Tools.getFormatNumber("1","Stu");
     	boolean tag=false;
     	//向DTO添加员工编号
     	
@@ -60,9 +49,15 @@ public class StuExcelServiceImpl extends JdbcServicesSupport
         			.append(" from user ")
         			.append("where user.uname=?")
         			;
+        	
+        	String sql4="select uid from user where name=?";
+			Map<String,String> map=this.queryForMap(sql4,this.getFromDto("导师"));
+			
+			Integer uid2=Integer.parseInt(map.get("uid"));
+			System.out.println(uid2);
         	//2.编写参数数组
         	Object args[]={
-        			Integer.parseInt(this.getFromDto("导师id").toString().substring(0,1)) ,
+        			uid2,
         			this.getFromDto("学号"),
         			this.getFromDto("身份证号"),
         			this.getFromDto("学生类型"),

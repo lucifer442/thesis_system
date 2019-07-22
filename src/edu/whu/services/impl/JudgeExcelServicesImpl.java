@@ -29,7 +29,7 @@ public class JudgeExcelServicesImpl extends JdbcServicesSupport
 					;
 			// 2.编写参数数组
 			Object args[] = { 
-			    this.getFromDto("name"),
+			    this.getFromDto("ename"),
 			    this.getFromDto("b102")
 			};
 			this.executeUpdate(sql.toString(), args);

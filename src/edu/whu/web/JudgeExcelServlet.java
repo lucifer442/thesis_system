@@ -239,7 +239,7 @@ public class JudgeExcelServlet extends HttpServlet
 					{
 						dto = new HashMap<>();
 						dto.put("b102",eparas.get(i2-1));
-						dto.put("ename",paras.get(j1-1));
+						dto.put("ename",paras.get(j1));
 						dtos.add(dto);
 					}
 					

@@ -1,27 +1,18 @@
 package edu.whu.services.impl;
 
+import java.util.Map;
+
 import edu.whu.services.support.JdbcServicesSupport;
 import edu.whu.system.db.DBUtils;
 import edu.whu.system.tools.Tools;
 
 public class ExpExcelServiceImpl extends JdbcServicesSupport 
 {
-	public boolean update(String utype) throws Exception 
-    {
-    	if(utype.equalsIgnoreCase("addEmp"))
-    	{
-    		return this.addEmp();
-    	}
-    	else
-    	{
-    		throw new Exception("在类[ Ab01ServicesImpl ]中进行了未定义的动作调用,动作名称是  "+utype);
-    	}	
-    }
     
     public boolean addEmp()throws Exception
     {
     	DBUtils.beginTransaction();
-    	String username = Tools.getFormatNumber("2","S");
+    	String username = Tools.getFormatNumber("2","Sta");
     	boolean tag=false;
     	//向DTO添加员工编号
     	
@@ -37,32 +28,54 @@ public class ExpExcelServiceImpl extends JdbcServicesSupport
     			"0"
     	};
     	this.executeUpdate(sql2.toString(), args2);
-//    	String sql3  = "insert into u_r_relation(uid,rid,u_r_state) values(?,?,?)";
-//    	Object args3[]= 
-//    	{
-//    		uid,
-//    		"1",
-//    		"1"
-//    	};
-//    	this.executeUpdate(sql3.toString(), args3);
     	
+    	String[] rolelist=((String)this.getFromDto("专家角色")).split(",");
+    	
+    	String sql3  = "insert into u_r_relation (uid,rid,u_r_state) select user.uid,?,? from user where user.uname=?";
+    	for(String s:rolelist)
+    	{
+    		
+    		if(s.equals("导师"))
+    		{
+    			System.out.println(s);
+    			String sql6 = "insert into a02(uid) select user.uid from user where user.uname=?";
+    			Object args6[]= 
+        			{
+        					username
+        			};
+    			this.executeUpdate(sql6.toString(), args6);
+    		}
+    		String sql5="select fcode from syscode where fvalue=? and fname='rid'";
+			Map<String,String> map=this.queryForMap(sql5,s);
+			System.out.println("map = "+map);
+    		Object args3[]= 
+    			{
+    					map.get("fcode"),
+    					"1",
+    					username
+    			};
+    		this.executeUpdate(sql3.toString(), args3);
+    	}
 
+    	String sql6="select fcode from syscode where fvalue=? and fname='a602'";
+		Map<String,String> map2=this.queryForMap(sql6,this.getFromDto("专家类型"));
+		String sql7="select fcode from syscode where fvalue=? and fname='a604'";
+		Map<String,String> map3=this.queryForMap(sql7,this.getFromDto("职称"));
     	
     	//1.编写SQL语句
     	StringBuilder sql = new StringBuilder()
-				.append("insert into a06(uid,uid2,a601,a602,a603,a604,a605,")
-				.append("                 a606,a607,a608,a609)")
-				.append(" select user.uid,?,?,?,?,?,?,?,?,?,?  ")
+				.append("insert into a06(uid,a601,a602,a603,a604,a605,")
+				.append("                 a606,a607,a608,a609) ")
+				.append(" select user.uid,?,?,?,?,?,?,?,?,? ")
 				.append(" from user     ")
 		        .append(" where user.uname=?  ");
 
     	//2.编写参数数组
     	Object args[]={
-    			Integer.parseInt(this.getFromDto("推荐导师id").toString().substring(0,1)),
     			this.getFromDto("所属大学"),
-    			this.getFromDto("专家类型").toString().substring(0,1),
+    			map2.get("fcode"),
     			this.getFromDto("研究领域"),
-    			this.getFromDto("职称").toString().substring(0,1),
+    			map3.get("fcode"),
     			this.getFromDto("身份证号"),
     			this.getFromDto("银行账户"),
     			this.getFromDto("开户银行"),
