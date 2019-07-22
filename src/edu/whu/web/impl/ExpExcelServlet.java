@@ -1,6 +1,5 @@
 package edu.whu.web.impl;
 
-import edu.whu.web.support.ExpControllerSupport;
 import edu.whu.web.support.ExpExcelControllerSupport;
 
 public class ExpExcelServlet extends ExpExcelControllerSupport 

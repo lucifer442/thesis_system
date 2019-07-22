@@ -117,8 +117,8 @@ public class B02ImplServices extends JdbcServicesSupport
 	public List<Map<String,String>> statib202() throws Exception
 	{
 		StringBuilder b202=new StringBuilder()
-//				.append("  select a.fvalue b202,count(x.b202) count")
-				.append("  select any_value(a.fvalue) b202,count(x.b202) count")
+				.append("  select a.fvalue b202,count(x.b202) count")
+//				.append("  select any_value(a.fvalue) b202,count(x.b202) count")
 				.append("    from syscode a,b02 x")
 				.append("   where x.b202=a.fcode and a.fname='b202'")
 				.append("group by b202")

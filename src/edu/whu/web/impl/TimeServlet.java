@@ -58,7 +58,7 @@ public class TimeServlet extends HttpServlet {
 				Date k = a;
 				for(;index<=datesub;index++)
 				{	
-					app01.setAttribute("date"+index, Tools.outputDate(k));
+					app01.setAttribute("date"+index, Tools.outputDate(k).substring(5));
 					k=Tools.addDate(k);
 				}
 				for(;index<=7;index++)

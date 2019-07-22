@@ -2,7 +2,6 @@ package edu.whu.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.xml.internal.ws.api.message.Message;
-
 import edu.whu.services.impl.InitServicesImpl;
 import edu.whu.services.impl.LoginServicesImpl;
-import edu.whu.services.impl.MessageServicesImpl;
 import edu.whu.system.tools.Tools;
 /**
   *  本servlet功能：
@@ -53,6 +49,7 @@ public class LoginServlet extends BaseServlet {
 			String username=request.getParameter("username");
 //			String password=request.getParameter("password");
 			String password=Tools.getMd5(request.getParameter("password"));
+			System.out.println(password);
 			map=services.queryUser(username, password);
 			if(map==null) 
 			{
@@ -66,36 +63,26 @@ public class LoginServlet extends BaseServlet {
 			}
 			else 
 			{
-				//设置用户含有的功能列表
-				if((boolean) map.get("hasrole")) 
+				Map<String,List<String>> rfmap=(Map<String, List<String>>) this.getServletContext().getAttribute("rfmap");
+				List<String> funclist=new ArrayList<String>();
+				for(String s:(List<String>)map.get("rid"))
 				{
-					Map<String,List<String>> rfmap=(Map<String, List<String>>) this.getServletContext().getAttribute("rfmap");
-					List<String> funclist=new ArrayList<String>();
-					for(String s:(List<String>)map.get("rid"))
+					for(String s1:rfmap.get(s))
 					{
-						for(String s1:rfmap.get(s))
+						if(!funclist.contains(s1))
 						{
-							if(!funclist.contains(s1))
-							{
-								funclist.add(s1);
-							}
+							funclist.add(s1);
 						}
 					}
-					//将所得到的值存入session
-					request.getSession().setAttribute("cuid",map.get("uid"));
-					request.getSession().setAttribute("cname",map.get("name"));
-					request.getSession().setAttribute("crolelist", map.get("rid"));
-					request.getSession().setAttribute("funclist", funclist);
-					this.getMessage(request);
-					
-					request.getRequestDispatcher("main.jsp").forward(request, response);
 				}
-				else
-				{
-					request.getSession().setAttribute("uid",map.get("uid"));
-					request.getSession().setAttribute("name",map.get("name"));
-					request.getRequestDispatcher("chooseRole.jsp").forward(request, response);
-				}
+				//将所得到的值存入session
+				request.getSession().setAttribute("cuid",map.get("uid"));
+				request.getSession().setAttribute("cname",map.get("name"));
+				request.getSession().setAttribute("crolelist", map.get("rid"));
+				request.getSession().setAttribute("funclist", funclist);
+				this.getMessage(request);
+				
+				request.getRequestDispatcher("main.jsp").forward(request, response);
 			}
 		} 
 		catch (Exception e)

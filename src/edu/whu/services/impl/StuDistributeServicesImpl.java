@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 import edu.whu.services.support.JdbcServicesSupport;
@@ -19,7 +23,7 @@ import edu.whu.system.tools.Tools;
 public class StuDistributeServicesImpl extends JdbcServicesSupport 
 {
 	//全部学生分配
-	public Map<String,Integer> distributeStu() throws Exception
+	public boolean distributeStu() throws Exception
 	{
 		//获取每个导师的uid和每一类学生的数量组成的Map
 		Map<String,Integer> map=new HashMap<String,Integer>();
@@ -75,6 +79,11 @@ L1:		for(int i=0;i<secSize;i++)
 				}
 			}
 		}
+		return true;
+	}
+	
+	public Object showDisResult() throws Exception
+	{
 		String sql="select uid3,count(uid3) num from a01 group by uid3";
 		List<Map<String,String>> list=this.queryForList(sql);
 		Map<String,Integer> result=new HashMap<>();
@@ -83,6 +92,15 @@ L1:		for(int i=0;i<secSize;i++)
 			result.put(m.get("uid3"), Integer.parseInt(m.get("num")));
 		}
 		return result;
+	}
+	
+	public List<Map<String,String>> query() throws Exception
+	{
+		String sql1="set @mycnt=0;";
+		DBUtils.prepareStatement(sql1).executeQuery();
+		String sql="select @mycnt:=@mycnt+1 as num,w.name aname,v.name bname,u.name cname,a.a101 "
+				 + "from a01 a,user u,user v,user w where a.uid=u.uid and v.uid=a.uid2 and w.uid=a.uid3 ";
+		return this.queryForList(sql);
 	}
 	
 	//学生导出方法
@@ -112,4 +130,31 @@ L1:		for(int i=0;i<secSize;i++)
         Collections.reverse(list);
         return list;
 	}
+	
+    /**
+     * 导出用户
+     * 
+     * @throws Exception
+     */
+    public void fillExcelData(ResultSet rs,Workbook wb,String[]headers)throws Exception 
+    {
+        int rowIndex=0; //第一行
+        Sheet sheet=wb.createSheet(); //创建sheet页
+        Row row=sheet.createRow(rowIndex++);
+        //创建标题
+        for (int i=0;i<headers.length;i++) 
+        {
+            row.createCell(i).setCellValue(headers[i]);
+        }
+        //导出数据库中的数据
+        while(rs.next())
+        {
+            row=sheet.createRow(rowIndex++);
+            for (int i=0;i<headers.length;i++)
+            {
+            	//rs.getObject(i + 1)得到一个对象，即数据库中一行的结果，每一列就是属性凑成一行变成对象。因为id是从1开始，所以要+1。
+                row.createCell(i).setCellValue(rs.getObject(i+1).toString());
+            }
+        }
+    }
 }

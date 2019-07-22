@@ -144,19 +144,17 @@ public class BaseServlet extends HttpServlet
 		Map<String,List<String>> messageContent=new HashMap<String,List<String>>();
 		List<String> messageList=new ArrayList<String>();
 		
-		String uid=(String) request.getSession().getAttribute("uid");
+		String uid=(String) request.getSession().getAttribute("cuid");
 		Map<String,List<String>> map=services.getMessage(uid);
 		
 		for(String key:map.keySet())
 		{
 			messageList.add(map.get(key).get(0));
-			
 			List<String> temp=new ArrayList<String>();
 			temp.add(map.get(key).get(1));
 			temp.add(map.get(key).get(2));
 			messageContent.put(key, temp);
 		}
-		
 		request.getSession().setAttribute("messageList", messageList);
 		request.getSession().setAttribute("messageContent", messageContent);
 	}

@@ -21,26 +21,31 @@ import edu.whu.services.support.JdbcServicesSupport;
 
 public class AdminServicesImpl extends JdbcServicesSupport
 {
-	private boolean deleteById()throws Exception
+	public boolean deleteById()throws Exception
 	{
 		DBUtils.beginTransaction();
 		boolean tag=false;
+		Object uid=this.getFromDto("uid");
 		try
 		{
 			//如果某用户是秘书同时兼任其他角色，删除该用户的秘书角色及附带的所有信息
-			String sql1="delete from a03 where uid=?;";
-//			String sql2="delete from a06 where uid=?;";
-			String sql3="delete from u_r_relation where rid='3' and uid=?;";
-			//考虑到可能需要保留该用户的其他角色，不对user进行修改
-			//String sql4="delete from user where uid=?;";
-//			System.out.println(getFromDto("uid"));
-			this.executeUpdate(sql1, this.getFromDto("uid"));
-//			this.executeUpdate(sql2, this.getFromDto("uid"));
-			this.executeUpdate(sql3, this.getFromDto("uid"));
-			//this.executeUpdate(sql4, this.getFromDto("uid"));
-			String sql5="update a01 set uid3='0' where uid3=?";
-			this.executeUpdate(sql5, this.getFromDto("uid"));
-			this.modifyOtherInfo(this.getFromDto("uid"));
+			String sql1="delete from a03 where uid="+uid;
+			String sql2="delete from u_r_relation where rid='3' and uid="+uid;
+			String sql3="update a01 set uid3='0' where uid3="+uid;
+			this.executeUpdate(sql1);
+			this.executeUpdate(sql2);
+			this.executeUpdate(sql3);
+			//查询该用户是否有其他角色
+			String sql4="select rid from u_r_relation where uid="+uid;
+			List<Map<String,String>> list=this.queryForList(sql4);
+			if(list.size()==0)
+			{
+				//没有其他角色，在专家表里删除此用户，用户表里删除此用户
+				String sql5="delete from a06 where uid="+uid;
+				String sql6="delete from user where uid="+uid;
+				this.executeUpdate(sql5);
+				this.executeUpdate(sql6);
+			}
 			DBUtils.commit();
 			tag=true;
 		}
@@ -57,7 +62,7 @@ public class AdminServicesImpl extends JdbcServicesSupport
 	}
 
 	
-	private boolean modifySecretary()throws Exception
+	public boolean modifySecretary()throws Exception
 	{
 		DBUtils.beginTransaction();
 		boolean tag=false;
@@ -107,14 +112,14 @@ public class AdminServicesImpl extends JdbcServicesSupport
 	/*
 	 * 管理员手动添加秘书
 	 */
-	private boolean secAdd()throws Exception
+	public boolean secAdd()throws Exception
 	{
 		DBUtils.beginTransaction();
 		boolean tag=false;
 		try
 		{
 			//获取当前员工用户名//2表示为教职工
-			String uname=Tools.getFormatNumber("2","2");
+			String uname=Tools.getFormatNumber("2","Sta");
 	    	//向DTO添加员工用户名R
 			this.putIntoDto("uname", uname);
 //			System.out.println(uname);
@@ -197,26 +202,37 @@ public class AdminServicesImpl extends JdbcServicesSupport
 				.append("select u.uid,u.name,a.a601,a.a603,s.fvalue xa604,a.a605,a.a608,a.a609")
 				.append("  from user u,a06 a,syscode s,u_r_relation r")
 				.append(" where s.fcode=a.a604 and u.uid=a.uid")
-				.append("   and s.fname='a604' and u.uid=r.uid and r.rid='3';");
+				.append("   and s.fname='a604' and u.uid=r.uid and r.rid='3' ");
 		return this.queryForList(sql.toString());
 	}
 	
-	private boolean batchDelete()throws Exception
+	public boolean batchDelete()throws Exception
 	{
-    	//定义SQL语句
-		String sql1="delete from a03 where uid=?";
-		String sql2="delete from a06 where uid=?;";
-		String sql3="delete from u_r_relation where uid=?;";
-//		String sql4="delete from user where uid=?;";
+		//定义SQL语句
+		//学生表内此秘书id置0
+		String sql1="update a01 set uid3='0' where uid=?;";
+		//删除该用户的秘书表信息
+		String sql2="delete from a03 where uid=?";
+		//删除该用户的秘书角色用户表信息
+		String sql3="delete from u_r_relation where rid='3' and uid=?;";
 		Object idList[]=this.getIdList("idList");
     	//执行
 		this.batchUpdate(sql1, idList);
 		this.batchUpdate(sql2, idList);
 		this.batchUpdate(sql3, idList);
-//		this.batchUpdate(sql4, idList);
 		for(Object id:idList)
 		{
-			modifyOtherInfo(id);
+			//查询是否有其他角色
+			String sql4="select rid from u_r_relation where uid="+id;
+			List<Map<String,String>> list=this.queryForList(sql4);
+			if(list.size()==0)
+			{
+				//没有其他角色，在专家表里删除此用户，用户表里删除此用户
+				String sql5="delete from a06 where uid="+id;
+				String sql6="delete from user where uid="+id;
+				this.executeUpdate(sql5);
+				this.executeUpdate(sql6);
+			}
 		}
 		return true;
 	}
@@ -226,7 +242,7 @@ public class AdminServicesImpl extends JdbcServicesSupport
     	//编写SQL语句
 		StringBuilder sql=new StringBuilder()
     			.append("select u.name,a.a601,a.a603,a.a604,a.a605,")
-    			.append("       a.a608,a.a609")
+    			.append("       a.a608,a.a609,u.uid")
     			.append("  from user u,a06 a")
     			.append(" where a.uid=u.uid")
     			.append("   and u.uid=?")
@@ -236,20 +252,20 @@ public class AdminServicesImpl extends JdbcServicesSupport
 	}
 	
 	//导入Excel
-	public boolean secAddByExcel() throws Exception 
+	public boolean secAddByExcel(String path) throws Exception 
 	{
 		//开启事务
 		DBUtils.beginTransaction();
 		boolean tag=false;
 		Map<String,String>map=new HashMap<>();
-		List<Map<String,String>>list=readXls();
+		List<Map<String,String>>list=readXls(path);
 		try
 		{
 			for (int i = 0; i < list.size(); i++) 
 			{
 				map=list.get(i);
 		    	//获取当前员工用户名//2表示为教职工
-				String uname=Tools.getFormatNumber("2","2");
+				String uname=Tools.getFormatNumber("2","Sta");
 				map.put("uname", uname);
 				
 				//向DTO添加员工用户名
@@ -320,34 +336,10 @@ public class AdminServicesImpl extends JdbcServicesSupport
 		return tag;
 	}
 	
-	//用于删除秘书时，对其他表的修改
-	private boolean modifyOtherInfo(Object uid)throws Exception
-	{
-		//查询该用户是否有其他角色
-		String sql1="select rid from u_r_relation where uid="+uid;
-		List<Map<String,String>> list=this.queryForList(sql1);
-		System.out.println(list);
-		if(list.size()==0)
-		{
-			//没有其他角色，在专家表和用户表删除此用户
-			String sql2="delete from a06 where uid="+uid;
-			String sql3="delete from user where uid="+uid;
-			this.executeUpdate(sql2);
-			this.executeUpdate(sql3);
-		}
-		else
-		{
-			//有其他角色，删除该用户的此角色
-			String sql2="delete from u_r_relation where rid='3' and uid="+uid;
-			this.executeUpdate(sql2);
-		}
-		return true;
-	}
-	
-	protected List<Map<String,String>>readXls()throws Exception 
+	protected List<Map<String,String>>readXls(String path)throws Exception 
 	{
 		//需要导入的Excel文件事先存放在WEB-INF文件夹下，后缀暂时只用xls
-		String path="D:/work/project/WebRoot/WEB-INF/sec_info.xls";
+		//String path="D:/work/project/WebRoot/WEB-INF/sec_info.xls";
 		InputStream is=new FileInputStream(path);
 		HSSFWorkbook hssfWorkbook=new HSSFWorkbook(is);
 		List<Map<String,String>> list=new ArrayList<>();
@@ -390,7 +382,7 @@ public class AdminServicesImpl extends JdbcServicesSupport
 		return list;
 	}
 	
-	//按syscode转化
+	//按syscode转化职务
 	private String toChar(String s)
 	{
 		if(s.equals("教授"))

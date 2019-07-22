@@ -1,8 +1,8 @@
 package edu.whu.web.impl;
 
-import edu.whu.web.support.ExpControllerSupport;
+import edu.whu.web.support.StaffControllerSupport;
 
-public class EmailServlet extends ExpControllerSupport {
+public class EmailServlet extends StaffControllerSupport {
 
 	@Override
 	public String execute() throws Exception

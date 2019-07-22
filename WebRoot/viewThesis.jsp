@@ -1,10 +1,10 @@
 <%@ page language="java" pageEncoding="GBK"%>
-<%@ include file="menu.jsp"%>
-<!DOCTYPE html>
+<%@ include file="topLine.jsp"%>
 <html>
 <head>
-<title>论文</title>
+<title>硕士学位论文评审答辩系统</title>
 </head>
+
 <body>
 	${msg}
 	<script src="js/pdfobject.min.js"></script>

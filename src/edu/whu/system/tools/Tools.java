@@ -16,7 +16,7 @@ import java.sql.*;
 public class Tools {
 	public Tools() {
 	}
-
+	
 	public static String joinArray(Object o) {
 		// ø’÷µ¿πΩÿ
 		if (o == null || o.equals("")) {
@@ -179,6 +179,18 @@ public class Tools {
 		}
 	}
 
+	public static void main(String[] arg)
+	{
+		try 
+		{
+			System.out.println(Tools.getMd5("201920301"));
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/***************************************************************************
 	 * MD5End
 	 ***************************************************************************/

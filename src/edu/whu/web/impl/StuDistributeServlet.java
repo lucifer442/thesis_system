@@ -7,6 +7,7 @@ public class StuDistributeServlet extends StuDistributeControllerSupport
 	public String execute() throws Exception
 	{
 		this.update("distributeStu","—ß…˙∑÷≈‰");
+		query();
 		return "studentDistribute";
 	}
 }

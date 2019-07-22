@@ -26,7 +26,7 @@ public class ChooseRoleServlet extends BaseServlet {
 		{
 			rolelist.add(s);
 		}
-		String uid=(String)request.getSession().getAttribute("uid");
+		String uid=(String)request.getSession().getAttribute("cuid");
 		System.out.println(uid);
 		//判断用户是否选择了承担的角色
 		if(list==null) 

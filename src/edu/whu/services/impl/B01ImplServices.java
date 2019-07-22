@@ -305,7 +305,7 @@ public class B01ImplServices extends JdbcServicesSupport
     			dto.get("b104"),
     			dto.get("b105"),
     			dto.get("b106"),
-    			dto.get("uid2")
+    			dto.get("uid")
     	};
 		this.executeUpdate(sql.toString(), args);	
 		
@@ -461,8 +461,8 @@ public class B01ImplServices extends JdbcServicesSupport
 	public List<Map<String,String>> statib107() throws Exception
 	{
 		StringBuilder b107=new StringBuilder()
-//				.append("  select a.fvalue b107,count(x.b107) count")
-				.append("  select any_value(a.fvalue) b107,count(x.b107) count")
+				.append("  select a.fvalue b107,count(x.b107) count")
+//				.append("  select any_value(a.fvalue) b107,count(x.b107) count")
 				.append("    from syscode a,b01 x")
 				.append("   where x.b107=a.fcode and a.fname='b107'")
 				.append("group by b107")
@@ -474,8 +474,8 @@ public class B01ImplServices extends JdbcServicesSupport
 	public List<Map<String,String>> statib108() throws Exception
 	{
 		StringBuilder b108=new StringBuilder()
-//				.append("  select a.fvalue b108,count(x.b108) count")
-				.append("  select any_value(a.fvalue) b108,count(x.b108) count")
+				.append("  select a.fvalue b108,count(x.b108) count")
+//				.append("  select any_value(a.fvalue) b108,count(x.b108) count")
 				.append("    from syscode a,b01 x")
 				.append("   where x.b108=a.fcode and a.fname='b108'")
 				.append("group by b108")
@@ -486,8 +486,8 @@ public class B01ImplServices extends JdbcServicesSupport
 	public List<Map<String,String>> statib109() throws Exception
 	{
 		StringBuilder b109=new StringBuilder()
-//				.append("  select a.fvalue b109,count(x.b109) count")
-				.append("  select any_value(a.fvalue) b109,count(x.b109) count")
+				.append("  select a.fvalue b109,count(x.b109) count")
+//				.append("  select any_value(a.fvalue) b109,count(x.b109) count")
 				.append("    from syscode a,b01 x")
 				.append("   where x.b109=a.fcode and a.fname='b109'")
 				.append("group by b109")

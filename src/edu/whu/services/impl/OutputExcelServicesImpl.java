@@ -1,48 +1,75 @@
 package edu.whu.services.impl;
 
 import java.sql.ResultSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import edu.whu.services.support.JdbcServicesSupport;
 import edu.whu.system.db.DBUtils;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 public class OutputExcelServicesImpl extends JdbcServicesSupport 
 {
+	public boolean addFinancial() throws Exception
+	{
+		StringBuilder sql=new StringBuilder()
+				.append("insert into b06(b602,b603,b604,b605,uid,rid,a602,a604) values()");
+		Object args[]={};
+		
+		
+		return this.executeUpdate(sql.toString(),args)>0;
+	}
+	
+	public List<Map<String,String>> query()throws Exception
+	{
+		StringBuilder sql=new StringBuilder()
+				.append("select b.b603,b.b602,b.b604,")
+				.append("       u.name,s.fvalue,a.a601,'200' as money")
+				.append("  from a06 a,b06 b,user u,syscode s")
+				.append(" where b.uid=u.uid and a.uid=u.uid")
+				.append("   and s.fname='a604' and b.a604=s.fcode")
+				.append("   and rid in('4','5')")
+				.append(" union ")
+				.append("select b.b603,b.b602,b.b604,")
+				.append("       u.name,s.fvalue,a.a601,'70' as money")
+				.append("  from a06 a,b06 b,user u,syscode s")
+				.append(" where b.uid=u.uid and a.uid=u.uid")
+				.append("   and s.fname='a604' and b.a604=s.fcode")
+				.append("   and rid='3'");
+		return this.queryForList(sql.toString());
+	}
+	
+	
 	public ResultSet financialList()throws Exception
 	{
 		//若用数字代表信息的，用syscode表的编码进行转换
-		//用neu数据库进行数据测试
+		//用rid区分专家和秘书，给予不同的酬金，再用union连接专家和秘书的财务信息
 		StringBuilder sql=new StringBuilder()
-				.append("select b.b603,b.b602 姓名,b.b604 导师,")
+				.append("select b.b603 学生学号,b.b602 学生姓名,b.b604 导师,")
 				.append("       u.name 姓名,s.fvalue 职称,a.a601 单位,'200' as '酬金'")
 				.append("  from a06 a,b06 b,user u,syscode s")
 				.append(" where b.uid=u.uid and a.uid=u.uid")
 				.append("   and s.fname='a604' and b.a604=s.fcode")
 				.append("   and rid in('4','5')")
 				.append(" union ")
-				.append("select b.b603,b.b602 姓名,b.b604 导师,")
+				.append("select b.b603 学生学号,b.b602 学生姓名,b.b604 导师,")
 				.append("       u.name 姓名,s.fvalue 职称,a.a601 单位,'70' as '酬金'")
 				.append("  from a06 a,b06 b,user u,syscode s")
 				.append(" where b.uid=u.uid and a.uid=u.uid")
 				.append("   and s.fname='a604' and b.a604=s.fcode")
-				.append("   and rid='3'")
-				.append("order by b603;");
+				.append("   and rid='3'");
 	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
 	}
 
 	public ResultSet financialListForInner()throws Exception
 	{
-		//若用数字代表信息的，用syscode表的编码进行转换
-		//用neu数据库进行数据测试
+		//新版本navicat需要在x.name用any_value()包被
+		//union连接评审信息和答辩信息，再用group by uid分组累加获得答辩评审次数，再分配总酬金
 	    StringBuilder sql=new StringBuilder()
+//	    		.append(" any_value(select x.name) 专家名称,any_value(x.a601) 所属院校,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 ")
 	    		.append(" select x.name 专家名称,x.a601 所属院校,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 ")
 	    		.append("   from ")
 	    		.append("(select n.uid,n.name,n.a601,n.b101 ")
@@ -62,9 +89,11 @@ public class OutputExcelServicesImpl extends JdbcServicesSupport
 	
 	public ResultSet financialListForOuter()throws Exception
 	{
-		//若用数字代表信息的，用syscode表的编码进行转换
-		//用neu数据库进行数据测试
+		//新版本navicat需要在x.name用any_value()包被
+		//union连接评审信息和答辩信息，再用group by uid分组累加获得答辩评审次数，再分配总酬金
 	    StringBuilder sql=new StringBuilder()
+//	    		.append(" select any_value(x.name) 专家名称,any_value(x.a601) 所属院校,any_value(x.a605) 身份证号码,any_value(x.a606) 银行账户,any_value(x.a607) 具体开户银行,")
+//	    		.append("        any_value(x.a608) 手机号码,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 from ")
 	    		.append(" select x.name 专家名称,x.a601 所属院校,x.a605 身份证号码,x.a606 银行账户,x.a607 具体开户银行,")
 	    		.append("        x.a608 手机号码,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 from ")
 	    		.append("(select n.uid,n.name,n.a601,n.b101,n.a605,n.a606,n.a607,n.a608 from ")
@@ -79,6 +108,25 @@ public class OutputExcelServicesImpl extends JdbcServicesSupport
 	    		.append("  group by uid;");
 	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
 	}
+	
+	//导出评审信息---查出待评审论文和评审专家，分别作为excel表的横轴和纵轴
+	//用于测量第一个结果集长度的工具
+	public ResultSet OutputpreviewExcel1()throws Exception
+	{
+		String sql="select u.name 专家姓名 from user u,u_r_relation r where r.rid='4' and r.u_r_state='1' and u.uid=r.uid;";
+	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
+	}
+	public ResultSet OutputpreviewExcel2()throws Exception
+	{
+	    String sql="select u.name 专家姓名 from user u,u_r_relation r where r.rid='4' and r.u_r_state='1' and u.uid=r.uid;";
+	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
+	}
+	public ResultSet OutputpreviewExcel3()throws Exception
+	{
+	    String sql="select b102 from b01;";
+	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
+	}
+	
 	
     /**
      * 导出用户
@@ -106,5 +154,64 @@ public class OutputExcelServicesImpl extends JdbcServicesSupport
             }
         }
     }
-
+    
+    //把结果集转化为String数组
+    private String[] RsToString(ResultSet rs,int length) throws Exception
+    {
+    	List<String> list=new ArrayList<>();
+    	while(rs.next())
+    	{
+    		String currentRow=new String();
+    		for(int i=0;i<length;i++)
+    		{
+    			currentRow=rs.getObject(1).toString();
+    		}
+    		list.add(currentRow);
+    	}
+    	
+    	//创建一个和list长度一样的数组
+    	String[] arr=new String[list.size()+1];
+    	//设置第一格为空
+    	arr[0]="";
+    	//如果list中存入了数据，转化为数组
+    	if(list != null && list.size()>0)
+    	{
+    		for(int i=0;i<list.size();i++)
+    		{
+    			//数组赋值
+    			arr[i+1]=list.get(i);
+    			System.out.println(arr[i]);
+    		}
+    	}
+    	return arr;
+    }
+    
+    public void fillExcelData2(ResultSet rs1,ResultSet rs2,ResultSet rs3,Workbook wb)throws Exception 
+    {
+        int rowIndex=0; //第一行
+        Sheet sheet=wb.createSheet(); //创建sheet页
+        Row row=sheet.createRow(rowIndex++);
+        //得到rs1的长度
+        int count=0;
+    	while(rs1.next())
+    	{
+    		count++;
+    	}
+        System.out.println(count);
+        String[] headers=RsToString(rs2, count);
+        for (int i=0;i<headers.length;i++) 
+        {
+        	//输出专家姓名到第一行
+            row.createCell(i).setCellValue(headers[i]);
+        }
+        //导出rs3的数据
+        while(rs3.next())
+        {
+            row=sheet.createRow(rowIndex++);
+        	//输出论文标题到第二行开始的第一列
+            row.createCell(0).setCellValue(rs3.getObject(1).toString());
+            System.out.println("------------");
+            System.out.println(rs3.getObject(1));
+        }
+    }
 }

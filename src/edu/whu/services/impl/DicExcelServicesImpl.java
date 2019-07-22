@@ -1,23 +1,12 @@
 package edu.whu.services.impl;
 
+import java.util.List;
+import java.util.Map;
 import edu.whu.services.support.JdbcServicesSupport;
 import edu.whu.system.db.DBUtils;
-import edu.whu.system.tools.Tools;
 
 public class DicExcelServicesImpl extends JdbcServicesSupport 
 {
-	 public boolean update(String utype) throws Exception 
-	    {
-	    	if(utype.equalsIgnoreCase("addEmp"))
-	    	{
-	    		return this.addEmp();
-	    	}
-	    	else
-	    	{
-	    		throw new Exception("在类[ Ab01ServicesImpl ]中进行了未定义的动作调用,动作名称是  "+utype);
-	    	}	
-	    }
-
 	public boolean addEmp() throws Exception 
 	{
 		boolean tag = false;
@@ -26,7 +15,7 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 
 				// 1.编写SQL语句
 				StringBuilder sql = new StringBuilder()
-						.append("insert into b04(c101,user06,b402,b403,b404,b405,b406,b407,b408,b409,b410) ")
+						.append("insert into b04(b101,user06,b402,b403,b404,b405,b406,b407,b408,b409,b410) ")
 						.append("select b01.b101, a03.uid,?,?,?,?,?,?,?,?,?")
 						.append("from b01 ,a01, a03, user ")
 						.append("where a01.uid=b01.uid1 ")
@@ -138,5 +127,17 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				DBUtils.endTransaction();
 			}
 		return tag;
+	}
+	
+	public List<Map<String,String>> query() throws Exception
+	{
+		StringBuilder sql=new StringBuilder()
+				.append("select a.a101,u.name name1,y.name name2,c.b402,v.name name3,")
+				.append("       d.b202,w.name name4,x.name name5,c.b404,c.b405,")
+				.append("       c.b406,c.b407")
+				.append("  from b04 c,user u,a01 a,b01 b,b02 d,user v,b03 e,user w,user x,user y")
+				.append(" where a.uid=b.uid1  and b.b101=c.b101 and a.uid=u.uid and d.b101=b.b101 and d.uid=v.uid")
+				.append("   and e.b101=b.b101 and e.uid=w.uid   and e.b302='1'  and c.user06=x.uid and a.uid2=y.uid");
+		return this.queryForList(sql.toString());
 	}
 }

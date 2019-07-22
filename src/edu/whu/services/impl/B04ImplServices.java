@@ -13,7 +13,7 @@ public class B04ImplServices extends JdbcServicesSupport
     			.append("  from syscode b, syscode c,b04 x")
     			.append(" where b.fcode=x.b409 and b.fname='b409'")
     			.append("   and c.fcode=x.b410 and c.fname='b410'")
-    			.append("   and x.c101=?")
+    			.append("   and x.b101=?")
     			;
 
     	return this.queryForMap(sql.toString(), this.getFromDto("b101"));

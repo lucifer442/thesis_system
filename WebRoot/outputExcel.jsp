@@ -1,97 +1,143 @@
-<%@ page language="java" import="java.util.*" pageEncoding="GBK"%>
-<%@ taglib uri="http://org.wangxg/jsp/extl" prefix="e"%>
+<%@ page language="java" pageEncoding="GBK"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ include file="menu.jsp"%>
+<%@ taglib uri="http://org.wangxg/jsp/extl" prefix="e"%>
+<%@ include file="topLine.jsp" %>
 <html>
 <head>
-   <title>导出财务报表</title>
-   <style type="text/css">
-   body 
-{
-	margin: 0 auto;
-	width: 100%;
-	height: 100%;
-	min-width: 1536px;
-	min-height: 720px;
-	/*background: #edf5dc;*/
-	background:#C89C52
-}
-
-form
-{
-	margin:auto;
-	width: 95%;
-    border-radius: 5px;
-}
-
-table
-{
-	background:#CCCCCC;
-	border-radius:10px;
-    margin: auto;
-}
-
-caption
-{
-	text-align: center;
-}
-
-tr
-{
-    border:midnightblue;
-}
-
-td
-{
-	text-align: center;
-	min-width: 120px;
-	height: 25px;
-}
-
-div
-{
-	min-height: 50px;
-}
-
-.ShortHR
-{
-	width: 160px;
-}
-
-.secAddForm
-{
-	width: 65%;
-}
-
-.secQueryForm
-{
-	width: 95%;
-}
-
-.50pxHeightBlank
-{
-	height:50px;
-}
-   </style>
+<title>硕士学位论文评审答辩系统</title>
+   <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/mycss.css">
+   <script src="bootstrap-3.3.7-dist/js/jquery-3.3.1.min.js"></script>
+   <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+   <script>
+   window.onload=function()
+   {
+       var item= document.getElementById("table");
+       var tbody=item.getElementsByTagName("tbody")[0];
+       var trs= tbody.getElementsByTagName("tr");
+       for(var i=0;i<trs.length;i++){  
+           if(i%4==1){  
+               trs[i].style.background="#d0e9c6";
+           }
+           else if(i%4==3)
+       	   {
+        	   trs[i].style.background="#fcf8e3"; 
+       	   }
+           else
+       	   {
+       	       trs[i].style.background="#FFFFFF";
+       	   }
+       }  
+   }
+   </script>
 </head>
 <body>
-${msg }
-   <br>
-   <br>
-   <form id="outputExcelForm" class="outputExcelForm" method="post">
-      <table border="1">
-         <tr>
-            <td>
-               <input type="submit" name="next" value="导出财务报表excel"
-                formaction="<%=path%>/financialExcel.xls"> 
-               <input type="submit" name="next" value="导出校内专家财务报表"
-                formaction="<%=path%>/financialExcelForInner.xls">
-               <input type="submit" name="next" value="导出校外专家财务报表"
-                formaction="<%=path%>/financialExcelForOuter.xls">
-            </td>
-         </tr>
-      </table>
-   </form>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+		</div>
+		<div class="col-md-10 column">
+			<form id="outputExcelForm" class="outputExcelForm" method="post" action="FinancialQuery.html">
+		      <table id="table" class="table">
+		      	<caption class="outputExcel-caption">财务报表
+		      		<div class="outputExcel-list">
+		      			<button type="button" class="btn btn-info" id="dropdownMenu1" data-toggle="dropdown">导出
+					        <span class="caret"></span>
+					    </button>
+					    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+					    	<li>
+					    		<input type="submit" class="btn btn-info" name="next" value="财务报表总表"
+					  			formaction="<%=path%>/financialExcel.xls"> 
+					    	</li>
+					        <li role="presentation">
+					            <input type="submit" class="btn btn-info" name="next" value="校内专家报表"
+					    		formaction="<%=path%>/financialExcelForInner.xls">
+					        </li>
+					        <li role="presentation">
+					            <input type="submit" class="btn btn-info" name="next" value="校外专家报表"
+				       			formaction="<%=path%>/financialExcelForOuter.xls">
+					        </li>
+					    </ul>
+		      		</div>
+		      	</caption>
+		      	<thead>
+		      		<tr>
+		      			<th>序号</th>
+		      			<th>学生学号</th>
+		      			<th>学生姓名</th>
+		      			<th>导师</th>
+		      			<th>专家</th>
+		      			<th>职称</th>
+		      			<th>单位</th>
+		      			<th>酬金</th>
+		      		</tr>
+		      	</thead>
+		      	<tbody>
+		      		<c:choose>
+				        <c:when test="${dataList!=null }">
+				        <!-- 显示查询到的数据 -->
+				           <c:forEach items="${dataList }" var="dataMap" varStatus="vs">
+				              <tr>
+				                 <td>${vs.count }</td>
+			                     <td>${dataMap.b603 }</td>
+							     <td>${dataMap.b602 }</td>
+							     <td>${dataMap.b604 }</td>
+							     <td>${dataMap.name}</td>
+							     <td>${dataMap.fvalue }</td>
+							     <td>${dataMap.a601 }</td>
+							     <td>${dataMap.money }</td>
+				              </tr>
+				           </c:forEach>
+				              
+				           <!-- 补充空行 -->
+				           <c:forEach begin="${fn:length(dataList)+1 }" step="1" end="15">
+				              <tr>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+					          </tr>
+				           </c:forEach>
+				        </c:when>
+				        <c:otherwise>
+				           <c:forEach begin="1" step="1" end="15">
+				              <tr>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				              </tr>
+				           </c:forEach>
+				        </c:otherwise>
+				    </c:choose>
+				    <tr>
+						<td colspan="8">
+						    <input type="submit" class="btn btn-info" name="next" value="查询财务报表">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="8">${msg }</td>
+					</tr>
+		      	</tbody>
+		      </table>
+		   </form>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+		</div>
+	</div>
+</div>
 </body>
 </html>
