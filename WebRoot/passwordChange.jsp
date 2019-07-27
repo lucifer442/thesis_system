@@ -55,7 +55,7 @@
 			<form action="<%=path%>/submit_Password.html" method="post"
 				onsubmit="return checkpwd();">
 				<table class="table" id="table">
-					<caption>ÐÞ¸ÄÃÜÂë<hr></caption>
+					<caption>ÐÞ¸ÄÃÜÂë</caption>
 					<tbody class="password-tbody">
 						<tr><td colspan="4"></td></tr>
 						<tr>

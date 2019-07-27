@@ -1,6 +1,7 @@
 package edu.whu.web.impl;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.whu.services.impl.TimeSetImpl;
+import edu.whu.system.db.DBUtils;
+import edu.whu.system.tools.News;
 import edu.whu.system.tools.Tools;
 
 /**
@@ -65,8 +68,10 @@ public class TimeServlet extends HttpServlet {
 				{
 					app01.setAttribute("date"+index, null);
 				}
-				TimeSetImpl ts = new TimeSetImpl();
-			    ts.timeclear();
+			    timeclear();
+			    String title = "答辩时间通知";
+				 String text = "新的答辩的时间已经设定,为:"+btime+"~"+etime+",请各位老师尽快安排空闲时间,各位同学做好准备";
+				 News.sendNews(title, text, "alluser");	
 			}
 				
 			} 
@@ -87,4 +92,14 @@ public class TimeServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	public void timeclear()throws Exception
+	  {	  	
+		 PreparedStatement pstm=null;
+
+		 String sql = "update a02,a03,a05 set a02.a201=null,a03.a301=null,a05.a504=null ";
+
+		 pstm=DBUtils.prepareStatement(sql.toString());
+		 pstm.execute();
+		 	 
+	  }
 }

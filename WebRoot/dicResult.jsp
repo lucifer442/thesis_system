@@ -40,12 +40,17 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div id="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#table"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form id="myform" method="post" action="<%=path%>/DicExcel.htms" encType="multipart/form-data">
 				<table class="table" id="table">
-					<caption>导入答辩信息<hr></caption>
+					<caption>导入答辩信息</caption>
 					<thead>
 						<tr>
 							<th>序号</th>
@@ -53,8 +58,6 @@
 							<th>学生姓名</th>
 							<th>导师</th>
 							<th>答辩时间</th>
-							<th>评阅委员</th>
-							<th>评阅成绩</th>
 							<th>答辩主席</th>
 							<th>答辩秘书</th>
 							<th>优秀人次</th>
@@ -74,8 +77,6 @@
 							<td>${dataMap.name1 }</td>
 							<td>${dataMap.name2 }</td>
 							<td>${dataMap.b402 }</td>
-							<td>${dataMap.name3}</td>
-							<td>${dataMap.b202 }</td>
 							<td>${dataMap.name4 }</td>
 							<td>${dataMap.name5 }</td>
 							<td>${dataMap.b404 }</td>
@@ -87,8 +88,6 @@
 						<!-- 补充空行 -->
 						<c:forEach begin="${fn:length(dataList)+1 }" step="1" end="15">
 							<tr>
-								<td></td>
-								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -117,26 +116,25 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td></td>
-							<td></td>
 						</tr>
 						</c:forEach>
 						</c:otherwise>
 						</c:choose>
 						<tr>
-							<td colspan="13">
+							<td colspan="11">
 								<input type="file" class="btn btn-info" name="uploadFile" accept=".xls"/>
-								<input class="btn btn-info" type="submit" value="Excel导入"/>
+								<input class="btn btn-info" type="submit" request value="Excel导入"/>
 								<input class="btn btn-info" type="submit" formaction="<%=path%>/DicExcelQuery.html" value="查询"/>
 							</td>
 						</tr>
-						<tr><td colspan="13">${msg }</td></tr>
+						<tr><td colspan="11">${msg }</td></tr>
 					</tbody>
 				</table>
 			</form>
 		</div>
 	</div>
 	<div class="row clearfix">
+		<div id="under"></div>
 		<div class="col-md-12 column">
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>

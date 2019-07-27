@@ -8,6 +8,7 @@ public final class SecAddServlet extends AdminControllerSupport
 	public String execute()throws Exception
 	{
 		this.update("secAdd","Ìí¼Ó");
-		return "secAddManage";
+		this.query();
+		return "secManage";
 	}
 }

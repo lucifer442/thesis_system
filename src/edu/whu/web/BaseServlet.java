@@ -18,7 +18,7 @@ import edu.whu.services.impl.MessageServicesImpl;
 import edu.whu.web.support.BaseControllerSupport;
 
 
-@WebServlet("*.html")
+@WebServlet(urlPatterns = "*.html",name="BaseServlet")
 public class BaseServlet extends HttpServlet 
 {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -141,21 +141,39 @@ public class BaseServlet extends HttpServlet
 	protected void getMessage(HttpServletRequest request) throws Exception
 	{
 		MessageServicesImpl services=new MessageServicesImpl();
-		Map<String,List<String>> messageContent=new HashMap<String,List<String>>();
-		List<String> messageList=new ArrayList<String>();
 		
+		Map<String,List<String>> messageContent=new HashMap<String,List<String>>();
+		
+		List<Map<String,String>> messageList=new ArrayList<>();
 		String uid=(String) request.getSession().getAttribute("cuid");
 		Map<String,List<String>> map=services.getMessage(uid);
 		
 		for(String key:map.keySet())
 		{
-			messageList.add(map.get(key).get(0));
-			List<String> temp=new ArrayList<String>();
-			temp.add(map.get(key).get(1));
-			temp.add(map.get(key).get(2));
-			messageContent.put(key, temp);
+			Map<String,String> temp=new HashMap<String,String>();
+			
+			temp.put("time", map.get(key).get(1));
+			
+			temp.put("href", map.get(key).get(0));
+			//是否已读
+			System.out.println(map.get(key).get(4));
+			temp.put("state", (map.get(key).get(4).equals("1"))?"已读":"未读");
+			List<String> list=new ArrayList<String>();
+			//时间
+			list.add(map.get(key).get(1));
+			//标题
+			list.add(map.get(key).get(2));
+			//内容
+			list.add(map.get(key).get(3));
+			//是否已读
+			list.add(map.get(key).get(4));
+			messageList.add(temp);
+			messageContent.put(key, list);
+			System.out.println("href="+temp.get("href"));
 		}
+		//消息列表
 		request.getSession().setAttribute("messageList", messageList);
+		//消息内容
 		request.getSession().setAttribute("messageContent", messageContent);
 	}
 	

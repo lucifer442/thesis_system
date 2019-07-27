@@ -12,6 +12,15 @@
 	//循环更改表格tr标签的背景颜色
 	window.onload=function()
 	{
+		var dataMap = "${dataMap.uid}";
+		var msg = "${msg}";
+		if(dataMap==""&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/student_Thesis.html";
+			vform.submit();
+		}
+		
 		var item= document.getElementById("table");
 		var tbody=item.getElementsByTagName("tbody")[0];
 		var trs= tbody.getElementsByTagName("tr");
@@ -45,28 +54,29 @@
 					<caption>我的论文</caption>
 					<thead></thead>
 					<tbody>
+						<c:if test="${not empty dataMap.b101 }">
 						<tr>
-							<th>标题</th>
+							<td>标题</td>
 							<td colspan="2">${dataMap.b102}</td>
 						</tr>
-						<tr>
-							<th>摘要</th>
-							<td colspan="2">${dataMap.b103}</td>
+						<tr height="74">
+							<td>摘要</td>
+							<td colspan="2" width="500" align="left">&#12288;&#12288;${dataMap.b103}</td>
 						</tr>
 						<tr>
-							<th>关键字</th>
+							<td>关键字</td>
 							<td colspan="2">${dataMap.b104}</td>
 						</tr>
 						<tr>
-							<th>领域</th>
+							<td>领域</td>
 							<td colspan="2">${dataMap.b105}</td>
 						</tr>
 						<tr>
-							<th>检查结果</th>
+							<td>检查结果</td>
 							<td colspan="2">${dataMap.b107}</td>
 						</tr>
 						<tr>
-							<th>评审结果</th>
+							<td>评审结果</td>
 							<td>
 							<c:choose>
 							<c:when test="${dataMap.b108=='未评审'}">
@@ -79,7 +89,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>答辩结果</th>
+							<td>答辩结果</td>
 							<td>
 							<c:choose>
 							<c:when test="${dataMap.b109=='未答辩'}">
@@ -92,29 +102,29 @@
 							</td>
 						</tr>
 						<tr>
-							<th>论文</th>
+							<td>论文</td>
 							<td colspan="2">
 						    <c:if test="${not empty dataMap.b101}">
 							    <a class="btn btn-info" href="<%=path%>/view_Thesis.html?b101=${dataMap.b101}" target="_blank">在线阅读</a>
 							</c:if>
 							</td>
 						</tr>
+						</c:if>
+						<c:if test="${empty dataMap.b101 }">
+						<tr><td colspan="3"></td></tr>
+						<tr><td colspan="3"></td></tr>
+						<tr><td colspan="3"></td></tr>
+						</c:if>
 						<tr>
-							<th>关键词统计</th>
-							<td>
-							<c:if test="${not empty dataMap.b101}">
-							关键词个数（默认10个）：<input type="number" name="num">
-								<input type="submit" class="btn btn-info" value="生成图表" formaction="<%=path%>/KeyWords.com?b101=${dataMap.b101}">
-								<input type="submit" class="btn btn-info" value="生成词云" formaction="<%=path%>/KeyWords.com?b101=${dataMap.b101}">
-							</c:if>
-							</td>
-						</tr>
-						<tr>
-						    <th>提交论文</th>
+						    <td>提交论文</td>
 						    <td>
 						        <button class="btn btn-info" type="submit" formaction="<%=path%>/student_Upload.html">${empty dataMap.b101?'新的提交':'重新提交'}</button>
 							</td>
 						</tr>
+						<tr><td colspan="3"></td></tr>
+						<c:if test="${empty dataMap.b101 }">
+						<tr><td colspan="3"></td></tr>
+						</c:if>
 					</tbody>
 				</table>
 			</form>

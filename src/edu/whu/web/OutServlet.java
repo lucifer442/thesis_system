@@ -15,9 +15,7 @@ public class OutServlet extends BaseServlet {
 	{
 		HttpSession session=request.getSession(false);
 		if(session!=null) {
-			session.removeAttribute("uid");
-			session.removeAttribute("name");
-			session.removeAttribute("funclist");
+			session.invalidate();
 		}
 		request.getRequestDispatcher("/login.jsp").forward(request, response);
 	}

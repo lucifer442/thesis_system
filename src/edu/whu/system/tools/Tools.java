@@ -16,7 +16,7 @@ import java.sql.*;
 public class Tools {
 	public Tools() {
 	}
-	
+
 	public static String joinArray(Object o) {
 		// 空值拦截
 		if (o == null || o.equals("")) {
@@ -40,6 +40,7 @@ public class Tools {
 		}
 	}
 
+	
 	/**
 	 * 获取员工流水号
 	 * @return  String number="yyyy"+4位流水码
@@ -183,7 +184,7 @@ public class Tools {
 	{
 		try 
 		{
-			System.out.println(Tools.getMd5("201920301"));
+			System.out.println(Tools.getMd5("201910001"));
 		}
 		catch (Exception e) 
 		{

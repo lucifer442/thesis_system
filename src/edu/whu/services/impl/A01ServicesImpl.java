@@ -91,7 +91,7 @@ public class A01ServicesImpl extends JdbcServicesSupport {
 
 		// 定义SQL主体
 		StringBuilder sql = new StringBuilder()
-				.append("select b.name,b.ustate,u.name name2,a.a101,a.a102,a.a103,a.a104,a.b101")
+				.append("select a.uid,b.name,b.ustate,u.name name2,a.a101,a.a102,a.a103,a.a104,a.b101")
 				.append("  from a01 a,user b,u_r_relation c,user u")
 				.append(" where a.uid=b.uid and u.uid=a.uid2")
 				.append("   and c.uid=b.uid")
@@ -115,7 +115,7 @@ public class A01ServicesImpl extends JdbcServicesSupport {
 			sql.append(" and a.a104=?");
 			paramList.add(a104);
 		}
-		return this.queryForList(sql.toString(), paramList.toArray());
+		return this.queryForList(sql.toString(),paramList.toArray());
 	}
 
 	/*************************************hzy修改*****************************************/
@@ -134,7 +134,12 @@ public class A01ServicesImpl extends JdbcServicesSupport {
 
 	public boolean deleteStu() throws Exception 
 	{
+		
 		Object[] idlist=this.getIdList("idlist");
+		for(Object o:idlist)
+		{
+			System.out.println(o);
+		}
 		String sql1="delete from u_r_relation where uid=?";
 		String sql2="delete from a01 where uid=?";
 		String sql3="delete from user where uid=?";
@@ -147,6 +152,7 @@ public class A01ServicesImpl extends JdbcServicesSupport {
 	public boolean disableStuByID() throws Exception
 	{
 		Object uid=this.getFromDto("uid");
+		System.out.println("uid");
 		String sql="update user set ustate = '0' where uid="+uid;
 		return this.executeUpdate(sql)>0;
 	}

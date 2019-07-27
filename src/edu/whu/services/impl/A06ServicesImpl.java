@@ -123,7 +123,6 @@ public class A06ServicesImpl extends JdbcServicesSupport
 			roles.append(m.get("rid")+",");
 		}
 		map.put("roles", roles.toString().substring(0,roles.toString().lastIndexOf(",")));
-		System.out.println(roles.toString().substring(0,roles.toString().lastIndexOf(",")));
 		return map;
 	}
 
@@ -145,10 +144,10 @@ public class A06ServicesImpl extends JdbcServicesSupport
 		
 		// 定义SQL主体
 		StringBuilder sql = new StringBuilder()
-				.append("select b.name,b.ustate,a.a601,a.a602,a.a603,s.fvalue a604,")
+				.append("select b.name,b.ustate,a.a601,x.fvalue a602,a.a603,s.fvalue a604,")
 				.append("       a.a605,a.a608,a.a609,a.uid")
-				.append("  from a06 a,user b,syscode s")
-				.append(" where a.uid=b.uid and s.fcode=a.a604 and s.fname='a604'")
+				.append("  from a06 a,user b,syscode s,syscode x")
+				.append(" where a.uid=b.uid and s.fcode=a.a604 and s.fname='a604' and x.fcode=a.a602 and x.fname='a602' ")
 				;
 		
 		// 参数列表
@@ -174,7 +173,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 		List<Map<String,String>> maplist=this.queryForList(sql.toString(), paramList.toArray());
 		
 		//建立set确定用户角色范围
-		Set<String> roleset=new HashSet<>();
+		Set<String> roleset=new HashSet<>( );
 		roleset.add("2");
 		roleset.add("4");
 		roleset.add("5");
@@ -206,10 +205,11 @@ public class A06ServicesImpl extends JdbcServicesSupport
 			else
 			{
 				m.put("roles", roles.toString().trim());
-				
 				//是否可删条件获取
+				//是否为学生导师
 				String sql3="select uid from a01 where uid2="+uid;
 				Map<String,String> c1=this.queryForMap(sql3);
+				//是否在评审，答辩表中有数据
 				String sql4="select uid from a04 where uid="+uid;
 				Map<String,String> c2=this.queryForMap(sql4);
 				String sql5="select uid from a05 where uid="+uid;
@@ -217,10 +217,39 @@ public class A06ServicesImpl extends JdbcServicesSupport
 				if(c1==null&&c2==null&c3==null)
 				{
 					canDel="1";
-					m.put("canDel", "1");
+					
 				}
+				m.put("canDel", canDel);
 			}
 		}
+		
+		//领域代码按syscode转换
+		for(Map<String,String> m:maplist)
+		{
+			String uid=m.get("uid");
+			List<Map<String,String>> list_1=new ArrayList<>();
+			List<Map<String,String>> list_2=new ArrayList<>();
+			//依据uid读出领域码
+			String sql_1="select a603 from a06 where uid="+uid;
+			list_1=this.queryForList(sql_1);
+			for(Map<String,String> map_1:list_1)
+			{
+				//读出领域代码字符串
+				String a603=map_1.get("a603");
+				//syscode转换
+				String sql_2="select fvalue from syscode where fname='a603' and fcode in("+a603+")";
+				list_2=this.queryForList(sql_2);
+				//将得到的多条数据，粘合成一条
+				StringBuilder str=new StringBuilder();
+				for(Map<String,String> fvalueMap:list_2)
+				{
+					str.append(fvalueMap.get("fvalue"));//程序语义---大数据
+					str.append(" ");//空格分隔
+				}
+				m.put("a603",str.toString());
+			}
+		}
+		
 		return maplist;
 	}
 	
@@ -340,7 +369,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 					this.executeUpdate(sql2);
 				}
 			}
-			String sql3 = "delete from u_r_relation where uid=?";
+			String sql3 = "delete from u_r_relation where uid="+uid;
 			this.executeUpdate(sql3);
 			String sql4 = "delete from a06 where uid="+uid;
 			this.executeUpdate(sql4);
@@ -378,7 +407,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 						this.executeUpdate(sql2);
 					}
 				}
-				String sql3 = "delete from u_r_relation where uid=?";
+				String sql3 = "delete from u_r_relation where uid="+uid;
 				this.executeUpdate(sql3);
 				String sql4 = "delete from a06 where uid="+uid;
 				this.executeUpdate(sql4);
@@ -433,8 +462,8 @@ public class A06ServicesImpl extends JdbcServicesSupport
 		boolean tag = false;
 		Properties properties = new Properties();
 		properties.put("mail.transport.protocol", "smtp");// 连接协议
-		properties.put("mail.smtp.host", "smtp.qq.com");// 主机名
-		properties.put("mail.smtp.port", 465);// 端口号
+		properties.put("mail.smtp.host", "smtp.163.com");// 主机名
+		//properties.put("mail.smtp.port", 465);// 端口号
 		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.ssl.enable", "true");// 设置是否使用ssl安全连接 ---一般都使用
 		properties.put("mail.debug", "true");// 设置是否显示debug信息 true 会在控制台显示相关信息
@@ -443,7 +472,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 		// 获取邮件对象
 		Message message = new MimeMessage(session);
 		// 设置发件人邮箱地址
-		message.setFrom(new InternetAddress("2892466166@qq.com"));
+		message.setFrom(new InternetAddress("rsh_whu@163.com"));
 		// 设置收件人邮箱地址
 		// message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new
 		
@@ -470,10 +499,18 @@ public class A06ServicesImpl extends JdbcServicesSupport
 			}
 		}
 		
+		
+		/*************演示用唯一接收邮件专家**************/
+		String uid=idlist.get(0);
+		idlist.clear();
+		idlist.add(uid);
+		/*************演示用唯一接收邮件专家**************/
+		
+		
 		for (String id : idlist)
 		{
 			StringBuilder sql3 = new StringBuilder()
-					.append("SELECT b.name, a.a609")
+					.append("SELECT b.uname,b.name, a.a609")
 					.append("  from a06 a, user b")
 					.append(" where a.uid=b.uid")
 					.append(" and a.uid=?")
@@ -484,7 +521,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 					.append("武汉大学计算机学院真诚地邀请您参与今年的研究生论文答辩.")
 					.append("您可以选择参与评审过程或答辩过程.")
 					.append("如果您能在百忙之中接受邀请,请登录以下网址进行注册\n")
-					.append(this.getFromDto("path").toString()+"/activate.jsp?flag="+Integer.parseInt(id)+"\n")
+					.append("http://localhost:8080/project/activate.jsp?flag="+mailinfo.get("uname")+"\n")
 					.append("武汉大学计算机学院欢迎您的到来")
 					;
 			// InternetAddress("xxx@qq.com"),new InternetAddress("xxx@qq.com"),new
@@ -495,7 +532,7 @@ public class A06ServicesImpl extends JdbcServicesSupport
 			// 得到邮差对象
 			Transport transport = session.getTransport();
 			// 连接自己的邮箱账户
-			transport.connect("2892466166@qq.com", "lhfqetcmysttdcij");// 密码为QQ邮箱开通的stmp服务后得到的客户端授权码
+			transport.connect("rsh_whu@163.com", "rshwhu1234");// 密码为QQ邮箱开通的stmp服务后得到的客户端授权码
 			// 发送邮件
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();

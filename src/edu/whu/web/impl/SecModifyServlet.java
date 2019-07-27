@@ -8,7 +8,7 @@ public final class SecModifyServlet extends AdminControllerSupport
 	public String execute()throws Exception
 	{
 		this.update("modifySecretary","ÐÞ¸Ä");
-		query();
+		this.query();
 		return "secManage";
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import edu.whu.services.support.JdbcServicesSupport;
 import edu.whu.system.db.DBUtils;
+import edu.whu.system.tools.News;
 
 public class DicExcelServicesImpl extends JdbcServicesSupport 
 {
@@ -32,7 +33,7 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 						this.getFromDto("良好"), 
 						this.getFromDto("合格"), 
 						this.getFromDto("不合格"),
-						" ",
+						this.getFromDto("评语"),
 						this.getFromDto("同意授予"), 
 						this.getFromDto("同意重新答辩"), 
 						this.getFromDto("答辩秘书"), 
@@ -131,6 +132,16 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 				};
 				this.executeUpdate(sql6.toString(), args6);
 				
+				String qusql = "select a01.uid from a01 where a01.a101="+this.getFromDto("学号");
+				Map<String,String> map3 = this.queryForMap(qusql);
+				String title = "答辩结果已发布";
+				String text = "答辩结果已经录入系统,您可以通过论文查询页面查看结果,如有疑问请联系秘书";
+				
+				String[] obj = {
+						map3.get("uid")
+				};
+				News.sendNews(title, text, obj);
+				
 				
 				DBUtils.commit();
 			} 
@@ -150,11 +161,11 @@ public class DicExcelServicesImpl extends JdbcServicesSupport
 	{
 		StringBuilder sql=new StringBuilder()
 				.append("select a.a101,u.name name1,y.name name2,c.b402,v.name name3,")
-				.append("       d.b202,w.name name4,x.name name5,c.b404,c.b405,")
+				.append("       d.b202,w.name name4,x.name name5,c.b404,c.b405,count(distinct a.a101),")
 				.append("       c.b406,c.b407")
 				.append("  from b04 c,user u,a01 a,b01 b,b02 d,user v,b03 e,user w,user x,user y")
 				.append(" where a.uid=b.uid1  and b.b101=c.b101 and a.uid=u.uid and d.b101=b.b101 and d.uid=v.uid")
-				.append("   and e.b101=b.b101 and e.uid=w.uid   and e.b302='1'  and c.user06=x.uid and a.uid2=y.uid");
+				.append("   and e.b101=b.b101 and e.uid=w.uid   and e.b302='1'  and c.user06=x.uid and a.uid2=y.uid group by a.a101");
 		return this.queryForList(sql.toString());
 	}
 }

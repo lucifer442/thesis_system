@@ -100,7 +100,7 @@
 								<input type="submit" name="next" class="btn btn-info" value="${empty dataMap.uid?'Ìí¼Ó':'ÐÞ¸Ä' }"
 								formaction="<%=path%>/${empty dataMap.uid?'add':'modify' }Stu.html">
 								<input type="submit" name="next" class="btn btn-info" value="·µ»Ø"
-								formaction="<%=path%>/queryStu.jsp"
+								formaction="<%=path%>/queryStu.html"
 								formnovalidate="formnovalidate">
 							</td>
 						</tr>

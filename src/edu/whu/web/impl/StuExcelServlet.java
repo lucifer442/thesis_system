@@ -1,7 +1,5 @@
 package edu.whu.web.impl;
 
-import edu.whu.web.support.DicExcelControllerSupport;
-import edu.whu.web.support.ExpControllerSupport;
 import edu.whu.web.support.StuExcelControllerSupport;
 
 public class StuExcelServlet extends StuExcelControllerSupport

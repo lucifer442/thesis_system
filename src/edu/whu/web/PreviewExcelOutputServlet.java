@@ -15,7 +15,7 @@ import edu.whu.services.impl.OutputExcelServicesImpl;
 import edu.whu.system.db.DBUtils;
 import edu.whu.web.BaseServlet;
 
-@WebServlet("/PreviewExcel.xls")
+@WebServlet(urlPatterns = "/PreviewExcel.xls",name="PreviewExcelOutputServlet")
 public class PreviewExcelOutputServlet extends BaseServlet
 {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 

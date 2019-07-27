@@ -13,7 +13,7 @@
 	<script>
 	//循环更改表格tr标签的背景颜色
 	window.onload=function()
-	{
+	{	
 		var item= document.getElementById("table");
 		var tbody=item.getElementsByTagName("tbody")[0];
 		var trs= tbody.getElementsByTagName("tr");
@@ -30,6 +30,15 @@
 				trs[i].style.background="#FFFFFF";
        		}
 		}
+		var uid = document.getElementById("uid");
+		var msg = "${msg}";
+		if(uid==null&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/preview_Thesis.html";
+			vform.submit();
+		}
+		
 		var select = document.getElementById("myselect");
 		var selectID = localStorage.getItem('selectID');
 		for (var i = 0; i < select.options.length; i++) {
@@ -38,7 +47,10 @@
 				break;
 			}
 		}
+
 	}
+	</script>
+	<script>
 	function onDetails(b101)
 	{
 		 var vform = document.getElementById("myform");
@@ -68,6 +80,10 @@
 	<div class="row clearfix">
 		<div class="col-md-2 column">
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#table"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#table3"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form id="myform" action="" method="post">
@@ -81,6 +97,7 @@
 					<caption>学生论文</caption>
 					<thead>
 						<tr>
+						    <th>学生姓名</th>
 							<th>标题</th>
 							<th>检查结果</th>
 							<th>答辩结果</th>
@@ -92,6 +109,7 @@
 					<c:when test="${dataList!=null}">
 					<c:forEach var="U" items="${dataList}">
 						<tr>
+						    <td>${U.name}<input id="uid" type="hidden"></td>
 							<td><a href="#" onclick="onDetails('${U.b101}')">${U.b102}</a></td>
 							<td>${U.b107}</td>
 							<td>
@@ -112,6 +130,7 @@
 					<!-- 补充空行 -->
 					<c:forEach begin="${fn:length(dataList)+1 }" step="1" end="15">
 						<tr>
+						    <td></td>
 			                <td></td>
 			                <td></td>
 			                <td></td>
@@ -122,6 +141,7 @@
 	                <c:otherwise>
 	                <c:forEach begin="1" step="1" end="10">
 	                	<tr>
+	                	    <td></td>
 			                <td></td>
 			                <td></td>
 			                <td></td>

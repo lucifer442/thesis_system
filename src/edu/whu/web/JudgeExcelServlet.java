@@ -1,24 +1,17 @@
 package edu.whu.web;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import edu.whu.services.impl.ExpExcelServiceImpl;
 import edu.whu.services.impl.JudgeExcelServicesImpl;
+import edu.whu.system.tools.News;
 import edu.whu.web.support.BaseController;
-import sun.misc.IOUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,15 +23,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-@WebServlet("*.htmn")
+@WebServlet(urlPatterns = "*.htmn",name="JudgeExcelServlet")
 public class JudgeExcelServlet extends HttpServlet 
 {
 	private static final long serialVersionUID = 1L;
@@ -86,7 +76,9 @@ public class JudgeExcelServlet extends HttpServlet
 				// 调用流程控制方法
 				toPath = controller.execute();
 			}
-
+			String title = "评审论文已分配";
+			String text = "您所需要评审的论文已经分配完毕,请各位评审专家尽快完成评审";
+			News.sendNews(title, text, "alljexp");
 		} 
 		catch (Exception ex) 
 		{

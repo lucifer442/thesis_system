@@ -12,19 +12,33 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 }
-
+.loginBtn-div
+{
+    padding-bottom: 10px;
+}
 #login-div
 {
 	margin-top: 100px;
-    background-color: lavender;
+    background-color: #;
     border-radius: 50px;
-    opacity: 0.8;
+    /*opacity: 0.8;*/
     width: 500px;
     height: 400px;
     left: 120px;
     padding-left: 50px;
+    box-shadow: inset 0 0 0 1px #e6e6fa, inset 1px 2px 0 #9999a6, 1px 2px 0 #c0c0c0, -1px 2px 0 #e6e6fa,
+    			2px 3px 0 #e6e6fa, -2px 3px 0 #e6e6fa, 2px 4px 0 #e6e6fa, -2px 4px 0 #e6e6fa,
+				0 2px 0 3px #79797d, 0 4px 0 3px #9999a1, -2px 5px 4px rgba(0,0,0,.6);
+    
+    
 }
-
+.myLoginBtn
+{
+	height: 48px;
+    width: 64px;
+    font-size: 20px;
+    text-align: center;
+}
 .login-form
 {
 	margin: 50px;
@@ -39,6 +53,8 @@
     color: black;
     font-size: 18px;
     text-align: center;
+    height: 100px;
+    text-shadow: 0 1px 0 #c0c0c0, 0 2px #979385;
 }
 .login-input
 {
@@ -46,8 +62,11 @@
 }
 .loginbtn-primary
 {
-	background: #729be6;
+	/*background: #729be6;*/
     color: white;
+    box-shadow: 0 2px 0 #c0c0c0, 0 2px #979385;
+    background: #227d1e;
+    width: 200px;
 }
 
 .login-tbody>tr>td
@@ -98,34 +117,34 @@
 .password-tbody>tr>td
 {
 	min-width: 200px !important;
-	border: none !important;
 }
 
 /*消息列表 main.jsp message.jsp*/
 #message-div
 {
-	padding-left: 100px;
+    padding-left: 100px;
     padding-right: 100px;
     border-radius: 50px;
-    background: #a7c6f6;
+    position: absolute;
+    width: 1250px;
 }
 .message-li
 {
 	font-size: 18px;
-	min-height: 50px;
+	min-height: 37px;
     padding-top: 13px;
 }
 .message-h2
 {
-	margin-top: 50px;
     text-align: center;
-    margin-bottom: 30px;
 }
 .message-content
 {   
-	text-align: left;
+    text-align: left;
     font-size: 18px;
     margin-bottom: 100px;
+    line-height: 37px;
+    margin-top: -5px;
 }
 .message-update
 {
@@ -183,13 +202,13 @@
 }
 .footer-p
 {
-	font-size: 15px
+	font-size: 15px;
+	color: #5f5b5b;
 }
 /*addStaff 样式设定*/
 .addStaff-tbody>tr>td
 {
 	min-width: 100px;
-	border-top: 0px solid #FFFFFF !important;
 }
 .examExecute-tbody>tr>td
 {
@@ -224,4 +243,54 @@
 .setTime-tbody>tr>td
 {
 	min-width: 40px;
+}
+.menu-ul
+{
+	margin-top: 10px;
+}
+
+.img-staff
+{
+    margin-top: 100px;
+    margin-left: 220px;
+}
+.img-student
+{
+	margin-top: 150px;
+}
+.infoManage-btn1
+{
+    margin-left: -180px;
+}
+.infoManage-btn2
+{
+    margin-left: 160px;
+}
+.infoManage-td
+{
+	border: 0px !important;
+}
+.redirect-body
+{
+	background-color: #fefefe;
+}
+.redirect-p
+{
+	font-size: 20px;
+}
+.redirect-img
+{
+	margin-left: 200px;
+}
+.tp
+{
+	bottom: 200px;
+    margin-left: 170px;
+    margin-bottom: 0;
+    border-width: 1px 0 0;
+    position: fixed;
+}
+.login-p-white
+{
+	color: #FFF !important;
 }

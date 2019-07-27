@@ -51,30 +51,14 @@
 				trs2[i].style.background="#FFFFFF";
        		}
 		}  
-	}
-	function onDetails(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/thesis_Details_Te.html?b101="+b101;
-		 vform.submit();
-	}
-	function onThesis(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/view_Thesis.html?b101="+b101;
-		 vform.submit();
-	}
-	function onExam(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/view_Review.html?b101="+b101;
-		 vform.submit();
-	}
-	function onPreview(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/view_Reply.html?b101=" + b101;
-		 vform.submit();
+		var uid = document.getElementById("uid");
+		var msg = "${msg}";
+		if(uid==null&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/teacher_Thesis.html";
+			vform.submit();
+		}
 	}
 	</script>
 </head>
@@ -86,7 +70,7 @@
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>
 		<div class="col-md-10 column">
-			<form action="<%=path%>/teacher_Search.html" method="post">
+			<form id="myform" action="<%=path%>/teacher_Search.html" method="post">
 				<table class="table" id="table">
 					<caption>论文信息查询</caption>
 					<tbody>
@@ -128,6 +112,7 @@
 				<table class="table" id="table2">
 					<thead>
 						<tr>
+						    <th>学生姓名</th>
 							<th>标题</th>
 							<th>导师检查结果</th>
 							<th>评审结果</th>
@@ -140,7 +125,8 @@
 					<c:when test="${dataList!=null}">
 					<c:forEach var="U" items="${dataList}">
 						<tr>
-							<td><a href="#" onclick="onDetails('${U.b101}')">${U.b102}</a></td>
+						    <td>${U.name}<input id="uid" type="hidden"></td>
+							<td><a href="<%=path%>/thesis_Details_Te.html?b101=${U.b101}">${U.b102}</a></td>
 							<td>${U.b107}</td>
 							<td>
 							<c:choose>
@@ -148,7 +134,7 @@
 								<p>${U.b108}</p>
 							</c:when>
 							<c:otherwise>
-								<a href="#" onclick="onExam('${U.b101}')">${U.b108}</a>
+								<a href="<%=path%>/view_Review.html?b101=${U.b101}">${U.b108}</a>
 							</c:otherwise>
 							</c:choose>
 							</td>
@@ -158,17 +144,18 @@
 								<p>${U.b109}</p>
 							</c:when> 
 							<c:otherwise>
-								<a href="#" onclick="onExam('${U.b101}')">${U.b109}</a>
+								<a href="<%=path%>/view_Reply.html?b101=${U.b101}">${U.b109}</a>
 							</c:otherwise>
 							</c:choose>
 							</td>
 							<td>
-								<a href="#" onclick="onThesis('${U.b101}')" target="_blank">在线阅读</a>
+								<a href="<%=path%>/view_Thesis.html?b101=${U.b101}" target="_blank">在线阅读</a>
 							</td>
 						</tr>
 						</c:forEach>
 						<c:forEach begin="${fn:length(dataList)+1 }" step="1" end="6">
 						<tr>
+						    <td></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -180,6 +167,7 @@
 				        <c:otherwise>
 				        <c:forEach begin="1" step="1" end="6">
 		              	<tr>
+		              	    <td></td>
 							<td></td>
 							<td></td>
 							<td></td>

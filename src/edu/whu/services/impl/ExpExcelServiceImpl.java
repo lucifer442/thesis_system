@@ -37,13 +37,10 @@ public class ExpExcelServiceImpl extends JdbcServicesSupport
     		
     		if(s.equals("µ¼Ê¦"))
     		{
-    			System.out.println(s);
-    			String sql6 = "insert into a02(uid) select user.uid from user where user.uname=?";
-    			Object args6[]= 
-        			{
-        					username
-        			};
-    			this.executeUpdate(sql6.toString(), args6);
+    			String sql8 = "insert into a02(uid) select user.uid from user where user.uname=?";
+    			this.executeUpdate(sql8.toString(), username);
+    			String sql9="update user set ustate='1' where uname="+username;
+    			this.executeUpdate(sql9.toString());
     		}
     		String sql5="select fcode from syscode where fvalue=? and fname='rid'";
 			Map<String,String> map=this.queryForMap(sql5,s);

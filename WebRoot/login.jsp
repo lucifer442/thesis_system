@@ -42,25 +42,25 @@
 					<form role="form" action="<%=path %>/login" class="login-form" method="post">
 						<table align="center" class="table">
 							<caption class="login-caption">
-								<h2>
+								<h2 class="login-p-white">
 									欢迎您
 								</h2>
 							</caption>
 						    <tbody class="login-tbody">
 							    <tr>
-									<td>用户名</td>
+									<td class="login-p-white">用户名</td>
 									<td>
 										<input type="text" name="username" class="form-control login-input" required="true"/>
 									</td>
 								</tr>
 								<tr>
-								 	<td>密码</td>
+								 	<td class="login-p-white">密码</td>
 									<td>
 										<input type="password"  class="form-control login-input" name="password" required="true">
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td colspan="2" class="login-p-white">
 										<input type="submit" class="btn loginbtn-primary" name="next" value="登录">
 									</td>
 								</tr>

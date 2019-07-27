@@ -14,9 +14,9 @@
    //给ul->li->a标签循环涂色
    window.onload=function()
    {
-       var item= document.getElementById("message-list");
-       var tbody=item.getElementsByTagName("ul")[0];
-       var trs= tbody.getElementsByTagName("li");
+       var item= document.getElementById("table");
+       var tbody=item.getElementsByTagName("tbody")[0];
+       var trs= tbody.getElementsByTagName("tr");
        for(var i=0;i<trs.length;i++){  
            if(i%4==1){  
                trs[i].style.background="#d0e9c6";
@@ -41,31 +41,57 @@
 		</div>
 		<div class="col-md-10 column">
 			<div align="center" id="message-list">
-				<ul style="list-style:none;">
-					<li>
-						<p class="message-title">消息列表</p>
-						<hr>
-						<div class="message-update">
-							<input type="submit" class="btn btn-info" name="next" value="刷新消息" formaction="<%=path%>/message">
-						</div>
-					</li>
-					<c:choose>
-					<c:when test="${messageList !=null}">
-					<c:forEach items="${messageList }" var="message">
-						<li class="message-li">${message }<br></li>
-					</c:forEach>
-					<c:forEach begin="${fn:length(messageList)+1 }" step="1" end="10">
-					    <li class="message-li"></li>
-					</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<li class="message-li">暂无消息</li>
-						<c:forEach begin="1" step="1" end="10">
-							<li class="message-li"></li>
-						</c:forEach>
-			        </c:otherwise>
-			        </c:choose>
-				</ul>
+				<form id="dicInfoQueryForm" action="" method="post">
+				<!-- 数据迭代区域 -->
+					<table class="table" id="table">
+						<caption>消息列表</caption>
+						<thead>
+							<tr>
+								<th width="100">时间</th>
+								<th width="100">标题</th>
+								<th width="100">是否已读</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+							<c:when test="${empty messageList}">
+							<c:forEach begin="1" step="1" end="9">
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</c:forEach>
+							</c:when>
+							<c:otherwise>
+							<c:forEach items="${messageList }" var="message">
+								<tr>
+									<td>${message.time }</td>
+									<td>${message.href }</td>
+									<td>${message.state}</td>
+								</tr>
+							</c:forEach>
+							<c:forEach begin="${fn:length(messageList)+1 }" step="1" end="10">
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</c:forEach>
+					        </c:otherwise>
+					        </c:choose>
+							<tr>
+								<td colspan="3"></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<input type="submit" class="btn btn-info" name="next" value="刷新消息" formaction="<%=path%>/message">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<e:hidden name="uid" value="101"/>
+				</form>
 			</div>
 		</div>
 	</div>

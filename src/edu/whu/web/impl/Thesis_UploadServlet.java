@@ -33,7 +33,7 @@ public class Thesis_UploadServlet extends HttpServlet
     private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
 
     /**
-           * 上传论文
+     * 上传论文
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException 
@@ -107,6 +107,7 @@ public class Thesis_UploadServlet extends HttpServlet
             
     		if(dataMap!=null)
     		{
+    			request.setAttribute("msg","文件上传成功!");
     			request.setAttribute("dataMap",dataMap);
     		}
     		else 

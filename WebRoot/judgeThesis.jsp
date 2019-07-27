@@ -58,7 +58,12 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div id="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#top"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form id="myform" action="<%=path%>/QueryJudge.html" method="post">
@@ -142,6 +147,7 @@
 		</div>
 	</div>
 	<div class="row clearfix">
+		<div id="under"></div>
 		<div class="col-md-12 column">
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>

@@ -3,9 +3,9 @@ package edu.whu.web.impl;
 import java.util.Map;
 
 import edu.whu.services.impl.B01ImplServices;
-import edu.whu.web.support.BaseControllerSupport;
+import edu.whu.web.support.UserControllerSupport;
 
-public class Student_ThesisServlet extends BaseControllerSupport
+public class Student_ThesisServlet extends UserControllerSupport
 {
 	private B01ImplServices b01ImplServices = new B01ImplServices();
 	

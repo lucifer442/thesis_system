@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="GBK"%>
 <%@ taglib uri="http://org.wangxg/jsp/extl" prefix="e"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ include file="topLine.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -31,19 +32,33 @@
 			{
 				trs[i].style.background="#FFFFFF";
        		}
-		}  
-	}
-	function onExam(b101)
-	{
-		var vform = document.getElementById("myform");
-		vform.action="<%=path%>/view_Review.html?b101="+b101;
-		vform.submit();
-	}
-	function onPreview(b101)
-	{
-		var vform = document.getElementById("myform");
-		vform.action="<%=path%>/view_Reply.html?b101=" + b101;
-		vform.submit();
+		}
+		var item2= document.getElementById("table2");
+		var tbody2=item2.getElementsByTagName("tbody")[0];
+		var trs2= tbody2.getElementsByTagName("tr");
+		for(var i=0;i<trs2.length;i++)
+		{  
+			if(i%4==1)
+			{  
+				trs2[i].style.background="#d0e9c6";
+			}
+			else if(i%4==3)
+			{
+				trs2[i].style.background="#fcf8e3"; 
+			}
+			else
+			{
+				trs2[i].style.background="#FFFFFF";
+       		}
+		} 
+		var dataList = "${dataList}";
+		var msg = "${msg}";
+		if(dataList==""&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/sec_Thesis.html";
+			vform.submit();
+		}
 	}
 	</script>
 </head>
@@ -53,11 +68,17 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div class="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#top"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form action="<%=path%>/sec_Search.html" method="post">
 				<table class="table" id="table">
+					<caption>学生论文</caption>
 					<tr>
 						<th>标题</th>
 						<td><e:text name="b102" defval="${U.b102}" /></td>
@@ -89,10 +110,10 @@
 				</table>
 			</form>
 			<form id="myform" action="" method="post">
-				<table class="table">
-					<caption>学生论文</caption>
+				<table class="table" id="table2">
 					<thead>
 						<tr>
+						    <th>学生姓名</th>
 							<th>标题</th>
 							<th>检查结果</th>
 							<th>评审结果</th>
@@ -100,8 +121,22 @@
 						</tr>
 					</thead>
 					<tbody>
+					<c:choose>
+					<c:when test="${empty dataList}">
+					<c:forEach begin="1" step="1" end="6">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</c:forEach>
+					</c:when>
+					<c:otherwise>
 					<c:forEach var="U" items="${dataList}">
 						<tr>
+						    <td>${U.name}</td>
 							<td>${U.b102}</td>
 							<td>${U.b107}</td>
 							<td>
@@ -110,7 +145,7 @@
 								<p>${U.b108}</p>
 							</c:when>
 							<c:otherwise>
-								<a href="#" onclick="onExam('${U.b101}')">${U.b108}</a>
+								<a href="<%=path%>/view_Review.html?b101=${U.b101}">${U.b108}</a>
 							</c:otherwise>
 							</c:choose>
 							</td>
@@ -120,21 +155,30 @@
 								<p>${U.b109}</p>
 							</c:when> 
 							<c:otherwise>
-								<a href="#" onclick="onExam('${U.b101}')">${U.b109}</a>
+								<a href="<%=path%>/view_Reply.html?b101=${U.b101}">${U.b109}</a>
 							</c:otherwise>
 							</c:choose>
 							</td>
 						</tr>
+					</c:forEach>
+					<c:forEach begin="${fn:length(dataList)+1 }" step="1" end="6">
 						<tr>
-							<td>${msg}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</c:forEach>
+					</c:otherwise>
+					</c:choose>
 					</tbody>
 				</table>
 			</form>
 		</div>
 	</div>
 	<div class="row clearfix">
+		<div id="under"></div>
 		<div class="col-md-12 column">
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>

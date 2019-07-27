@@ -73,7 +73,7 @@
 	
 						<tr>
 							<td>бшнд</td>
-							<td><input type="file" id="b106" name="b106"></td>
+							<td><input type="file" class="btn btn-info" id="b106" accept="application/pdf" name="b106"></td>
 						</tr>
 						<tr>
 							<td colspan="2">

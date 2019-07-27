@@ -16,9 +16,9 @@
 		var tbody=item.getElementsByTagName("tbody")[0];
 		var trs= tbody.getElementsByTagName("tr");
 		for(var i=0;i<trs.length;i++)
-		{  
+		{
 			if(i%4==1)
-			{  
+			{
 				trs[i].style.background="#d0e9c6";
 			}
 			else if(i%4==3)

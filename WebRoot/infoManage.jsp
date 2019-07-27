@@ -40,21 +40,16 @@
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>
 		<div class="col-md-10 column">
-			<form id="myform" action="" method="post">
-			<!-- 数据迭代区域 -->
+			<form id="dicInfoQueryForm" action="" method="post">
+			<img class="img-staff" alt="" src="./images/staff.png" width="300px" height="300px">
+			<img class="img-student" alt="" src="./images/student.png" width="300px" height="300px">
 				<table class="table" id="table">
-					<caption>信息管理</caption>
-					<tbody>
-						<tr><td>&#12288;</td></tr>
-						<tr>
-							<td><input class="btn btn-info" type="submit" value="教职人员信息管理" name="next" formaction="<%=path %>/queryStaff.jsp"></td>
-						</tr>
-						<tr><td>&#12288;</td></tr>
-						<tr>
-							<td><input class="btn btn-info" type="submit" value="学生信息管理" name="next" formaction="<%=path %>/queryStu.jsp"></td>
-						</tr>
-						<tr><td>&#12288;</td></tr>
-					</tbody>
+					<tr>
+						<td class="infoManage-td">
+							<input class="btn btn-info infoManage-btn1" type="submit" value="教职人员信息管理" name="next" formaction="<%=path %>/queryStaff.jsp">
+							<input class="btn btn-info infoManage-btn2" type="submit" value="学生信息管理" name="next" formaction="<%=path %>/queryStu.jsp">
+						</td>
+					</tr>
 				</table>
 				<e:hidden name="uid" value="101"/>
 			</form>

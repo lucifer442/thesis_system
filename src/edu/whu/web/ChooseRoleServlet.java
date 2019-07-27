@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.whu.services.impl.ChooseRoleServicesImpl;
 
-@WebServlet("/chooseRole")
+@WebServlet(urlPatterns = "/chooseRole",name="ChooseRoleServlet")
 public class ChooseRoleServlet extends BaseServlet {
 	
 	@Override

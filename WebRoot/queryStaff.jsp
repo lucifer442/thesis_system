@@ -56,9 +56,11 @@
       {
     	  vstate?count++:count--;
     	  var vdel=document.getElementById("del");
-    	  var vdel2=document.getElementById("ema");
+    	  var vdisa=document.getElementById("disa");
+    	  var vable=document.getElementById("able");
     	  vdel.disabled=(count==0);
-    	  vdel2.disabled=(count==0);
+    	  vdisa.disabled=(count==0);
+    	  vable.disabled=(count==0);
       }
       
       function onEdit(vaab101)
@@ -127,7 +129,12 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div id="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#top"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form id="myform" action="<%=path%>/queryStaff.html" method="post">
@@ -196,7 +203,7 @@
 							<td>${ins.a605 }</td>
 							<td>${ins.a608 }</td>
 							<td>${ins.a609 }</td>
-							<td>${ins.roles }</td>
+							<td>${ins.roles}</td>
 							<td>
 								<a href="#" onclick="onEdit('${ins.uid}')">修改</a>
 							</td>
@@ -263,10 +270,10 @@
 							<td colspan="14">
 								<input type="submit" class="btn btn-info" name="next" value="查询">
 								<input type="submit" class="btn btn-info" name="next" value="添加" formaction="<%=path%>/addStaff.jsp">
-								<input type="submit" class="btn btn-info" name="next" value="启用" formaction="<%=path %>/ableStaff.html">
-								<input type="submit" class="btn btn-info" name="next" value="禁用" formaction="<%=path %>/disaStaff.html">
+								<input type="submit" class="btn btn-info" id="able" name="next" value="启用" formaction="<%=path %>/ableStaff.html" disabled="disabled">
+								<input type="submit" class="btn btn-info" id="disa" name="next" value="禁用" formaction="<%=path %>/disaStaff.html" disabled="disabled">
 								<input type="submit" class="btn btn-info" id="del" name="next" value="删除" formaction="<%=path%>/delStaff.html" disabled="disabled">
-								<input type="submit" class="btn btn-info" id="ema" name="next" value="发送邀请" formaction="<%=path%>/Email.html" disabled="disabled">
+								<input type="submit" class="btn btn-info" id="ema" name="next" value="发送邀请" formaction="<%=path%>/Email.html">
 								<a class="btn btn-info" href="<%=path %>/infoManage.jsp">返回</a>
 							</td>
 						</tr>
@@ -276,10 +283,10 @@
 			</form>
 			
 			<form method="post" action="<%=path%>/ExpExcel.htms" encType="multipart/form-data">
-				<table class="table">
+				<table class="table" id="table3">
 					<tbody>
 						<tr><td>
-							<input type="file" class="btn btn-info" name="uploadFile" accept=".xls"/> 
+							<input type="file" class="btn btn-info" name="uploadFile" required accept=".xls"/> 
 							<input class="filesubmit btn btn-info" type="submit" value="Excel导入" />
 						</td></tr>
 					</tbody>
@@ -288,6 +295,7 @@
 		</div>
 	</div>
 	<div class="row clearfix">
+		<div id="under"></div>
 		<div class="col-md-12 column">
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>

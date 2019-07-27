@@ -66,7 +66,7 @@ public class SetTimeServicesImpl extends JdbcServicesSupport
         		}
         		if(c=='5')
         		{
-        			sql.append("update a05 set a505=? where uid=? ");
+        			sql.append("update a05 set a504=? where uid=? ");
         			//System.out.println("5555555");
         			this.executeUpdate(sql.toString(), args);
         		}

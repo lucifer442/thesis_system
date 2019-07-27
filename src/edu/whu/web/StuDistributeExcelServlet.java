@@ -16,7 +16,7 @@ import edu.whu.services.impl.StuDistributeServicesImpl;
 import edu.whu.system.db.DBUtils;
 import edu.whu.web.BaseServlet;
 
-@WebServlet("/stuDistribute.xls")
+@WebServlet(urlPatterns = "/stuDistribute.xls",name="StuDistributeExcelServlet")
 public class StuDistributeExcelServlet extends BaseServlet
 {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 

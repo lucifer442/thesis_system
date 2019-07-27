@@ -3,6 +3,7 @@ package edu.whu.services.impl;
 import java.util.Map;
 
 import edu.whu.services.support.JdbcServicesSupport;
+import edu.whu.system.tools.Tools;
 
 public class UserImplServices extends JdbcServicesSupport
 {
@@ -20,7 +21,7 @@ public class UserImplServices extends JdbcServicesSupport
 				;
 		Object args1[]= {
 				this.getFromDto("cuid"),
-				this.getFromDto("upassword1")
+				Tools.getMd5(this.getFromDto("upassword1"))
 				};
 		
 		//原密码不正确返回false
@@ -35,7 +36,7 @@ public class UserImplServices extends JdbcServicesSupport
 				.append(" where uid=?")
 				;
 		Object args2[]= {
-				this.getFromDto("upassword2"),
+				Tools.getMd5(this.getFromDto("upassword2")),
 				this.getFromDto("cuid")
 		};
 		return this.executeUpdate(sql.toString(), args2)>0;

@@ -1,6 +1,5 @@
 package edu.whu.web.impl;
 
-import edu.whu.web.support.ExpControllerSupport;
 import edu.whu.web.support.QueryJudgeControllerSupport;
 
 public final class QueryJudgeServlet extends QueryJudgeControllerSupport 

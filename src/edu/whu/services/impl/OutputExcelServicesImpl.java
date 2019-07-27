@@ -13,14 +13,29 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 public class OutputExcelServicesImpl extends JdbcServicesSupport 
 {
-	public boolean addFinancial() throws Exception
+	public boolean financialAdd() throws Exception
 	{
-		StringBuilder sql=new StringBuilder()
-				.append("insert into b06(b602,b603,b604,b605,uid,rid,a602,a604) values()");
-		Object args[]={};
-		
-		
-		return this.executeUpdate(sql.toString(),args)>0;
+		String sql1="delete from b06;";
+		this.executeUpdate(sql1);
+		StringBuilder sql2=new StringBuilder()
+				.append("insert into b06(b602,b603,b604,b605,uid,rid,a602,a604)")
+				.append("select u1.name b602,a.a101 b603,u2.name b604,d.a601 b605,u3.uid,")
+				.append("       '4' as rid,d.a602,d.a604")
+				.append("  from user u1,a01 a,user u2,b01 b,user u3,b02 c,a06 d")
+				.append(" where u1.uid=a.uid and a.uid2=u2.uid")
+				.append("   and b.uid1=a.uid and b.b101=c.b101 and c.uid=u3.uid")
+				.append("   and c.uid=d.uid union ")
+				.append("select u1.name b602,a.a101 b603,u2.name b604,d.a601 b605,u3.uid,")
+				.append("       '5' as rid,d.a602,d.a604")
+				.append("  from user u1,a01 a,user u2,b01 b,user u3,b03 c,a06 d")
+				.append(" where u1.uid=a.uid and a.uid2=u2.uid")
+				.append("   and b.uid1=a.uid and b.b101=c.b101 and c.uid=u3.uid")
+				.append("   and c.uid=d.uid union ")
+				.append("select u1.name,a.a101,u2.name,d.a601,u3.uid,'3' as rid,d.a602,d.a604 ")
+				.append("  from user u1,user u2,user u3,a01 a,b01 b,b04 c,a06 d ")
+				.append(" where a.uid=u1.uid and b.b101=c.b101 and b.uid1=u1.uid and u2.uid=b.uid2 ")
+				.append("   and c.user06=u3.uid and d.uid=u3.uid ");
+		return this.executeUpdate(sql2.toString())>0;
 	}
 	
 	public List<Map<String,String>> query()throws Exception
@@ -67,23 +82,36 @@ public class OutputExcelServicesImpl extends JdbcServicesSupport
 	public ResultSet financialListForInner()throws Exception
 	{
 		//新版本navicat需要在x.name用any_value()包被
-		//union连接评审信息和答辩信息，再用group by uid分组累加获得答辩评审次数，再分配总酬金
+		//union连接评审信息、答辩信息和秘书信息，再用group by uid分组累加获得答辩评审次数，得到总酬金
 	    StringBuilder sql=new StringBuilder()
-//	    		.append(" any_value(select x.name) 专家名称,any_value(x.a601) 所属院校,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 ")
-	    		.append(" select x.name 专家名称,x.a601 所属院校,count(x.b101) 答辩评审次数,count(x.b101)*'200' 酬金 ")
-	    		.append("   from ")
-	    		.append("(select n.uid,n.name,n.a601,n.b101 ")
-	    		.append("   from ")
-	    		.append("(select u.uid,u.name,a.a601,b.b101 ")
-	    		.append("   from a06 a,user u,b02 b")
-	    		.append("  where u.uid=a.uid and u.uid=b.uid and a.a602='1')n")
-	    		.append("  union ")
-	    		.append(" select m.uid,m.name,m.a601,m.b101 ")
-	    		.append("   from ")
-	    		.append("(select u.uid,u.name,a.a601,c.b101 ")
-	    		.append("   from a06 a,user u,b03 c")
-	    		.append("  where u.uid=a.uid and u.uid=c.uid and a.a602='1')m)x")
-	    		.append("  group by uid");
+//	    		.append(" select any_value(x.name),any_value(x.b605),any_value(x.num),any_value(x.money) from ")
+//	    		.append("(select any_value(u.uid),any_value(u.name),any_value(b.b605),count(b.uid) as num,count(b.uid)*'70' as money ")
+//	    		.append("   from user u,b06 b ")
+//	    		.append("  where u.uid=b.uid and b.rid='3' ")
+//	    		.append("  group by b.uid union ")	
+//	    		.append(" select any_value(u.uid),any_value(u.name),any_value(a.a601),count(c.b101) as num,count(c.b101)*'200' as money ")
+//	    		.append("   from a06 a,user u,b03 c ")
+//	    		.append("  where u.uid=a.uid and u.uid=c.uid and a.a602='1' ")
+//	    		.append("  group by c.uid union ")
+//	    		.append(" select any_value(u.uid),any_value(u.name),any_value(a.a601),count(c.b101) as num,count(c.b101)*'200' as money ")
+//	    		.append("   from a06 a,user u,b02 c ")
+//	    		.append("  where u.uid=a.uid and u.uid=c.uid and a.a602='1' ")
+//	    		.append("  group by c.uid)x ")
+//	    		.append("  group by x.uid");
+				.append(" select x.name,x.b605,x.num,x.money from ")
+				.append("(select u.uid,u.name,b.b605,count(b.uid) as num,count(b.uid)*'70' as money ")
+				.append("   from user u,b06 b ")
+				.append("  where u.uid=b.uid and b.rid='3' ")
+				.append("  group by b.uid union ")
+				.append(" select u.uid,u.name,a.a601,count(c.b101) as num,count(c.b101)*'200' as money ")
+				.append("   from a06 a,user u,b03 c ")
+				.append("  where u.uid=a.uid and u.uid=c.uid and a.a602='1' ")
+				.append("  group by c.uid union ")
+				.append(" select u.uid,u.name,a.a601,count(c.b101) as num,count(c.b101)*'200' as money ")
+				.append("   from a06 a,user u,b02 c ")
+				.append("  where u.uid=a.uid and u.uid=c.uid and a.a602='1' ")
+				.append("  group by c.uid)x ")
+				.append("  group by x.uid");
 	    return DBUtils.prepareStatement(sql.toString()).executeQuery();
 	}
 	

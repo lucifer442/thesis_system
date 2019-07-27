@@ -14,8 +14,8 @@
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
-			    <li>
-					<p class="text-center">${cname }</p>
+			    <li class="dropdown">
+					<a disable="true" class="text-center">${cname }</a>
 				</li>
 				<li class="dropdown">
 					<a href="out">${empty cuid?'Î´µÇÂ¼':'ÍË³öµÇÂ¼' }</a>

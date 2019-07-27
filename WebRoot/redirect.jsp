@@ -11,18 +11,19 @@
 	var i=3;
 	$(function()
 	{
-		if("${cname}"==null)
+		if(${empty cuid})
 		{
-			setTimeout(function(){window.location.href="login.jsp";},3000);//3秒后返回首页
+			setTimeout(function(){window.location.href="login.jsp";},3000);//3秒后返回登录页面
 			after();
 		}
 		else
 		{
-			setTimeout(function(){window.location.href="javascript:history.go(-1)";},3000);
+			//setTimeout(function(){window.location.href="javascript:history.go(-1)";},3000);
+			setTimeout(function(){window.location.href="main.jsp";},3000);
 			after();
 		}
 	});
-	//自动刷新页面上的时间
+	自动刷新页面上的时间
 	function after()
 	{
 		$("#num").empty().append(i);
@@ -34,12 +35,13 @@
 	</script>
 <title>硕士学位论文评审答辩系统</title>
 </head>
-<body>
+<body class="redirect-body">
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-				<p align="center">${msg }</p>
-				<p align="center">页面将在<span id="num" style="color:red">3</span>秒后跳转至${ cuid?'登录页面':'上一页面' }</p><br>
+			<p align="center">${msg }</p>
+			<p align="center" class="redirect-p">页面将在<span id="num" style="color:red">3</span>秒后跳转至${empty cuid?'登录页面':'主页面' }</p><br>
+			<img class="redirect-img" alt="" src="./images/404.jpg" width="1013px" height="604px">
 		</div>
 	</div>
 	<div class="row clearfix">

@@ -14,11 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-
 import edu.whu.services.support.JdbcServicesSupport;
 import edu.whu.system.db.DBUtils;
-import edu.whu.system.tools.Tools;
 
 public class StuDistributeServicesImpl extends JdbcServicesSupport 
 {

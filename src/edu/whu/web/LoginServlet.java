@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,21 +27,20 @@ import edu.whu.system.tools.Tools;
 public class LoginServlet extends BaseServlet {
 	
 	@Override
-	public void init()
-	{
-		InitServicesImpl services=new InitServicesImpl();
-		try {
-			Map<String,List<String>> rfmap=services.initQuery();
-			this.getServletContext().setAttribute("rfmap", rfmap);
-		} catch (Exception e) {
-			System.out.println("init failed");
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,ServletException 
 	{
+		try {
+			if(this.getServletContext().getAttribute("btime")!=null)
+			{
+				this.getServletContext().setAttribute("rfmap", this.getServletContext().getAttribute("rfmap1"));
+			}
+			else
+			{
+				this.getServletContext().setAttribute("rfmap", this.getServletContext().getAttribute("rfmap2"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//生成servicesImpl对象
 		LoginServicesImpl services=new LoginServicesImpl();
 		Map<String,Object> map=null;

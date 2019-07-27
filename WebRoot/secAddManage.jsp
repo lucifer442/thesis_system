@@ -128,9 +128,13 @@
 			            </td>
 			         </tr>
 			         <tr>
+			            <td>其他角色</td>
+			            <td>
+			               <e:groupbox name="roles" value="导师:2,专家:7" defval="${dataMap.roles }"/>
+			            </td>
+			         </tr>
+			         <tr>
 			            <td colspan="2" align="center">
-			               
-			               
 			               <input type="submit" name="next" class="btn btn-info" value="确认${empty param.uid?'添加':'修改'}"
 			                formaction="<%=path%>/sec${empty param.uid?'Add':'Modify'}.html">
 			               <input type="submit" name="next" value="查询秘书" class="btn btn-info" 
@@ -155,7 +159,7 @@
 		   		<tbody>
 			   		<tr>
 			   			<td>
-				   			<input type="file" class="btn btn-info" name="b106">
+				   			<input type="file" class="btn btn-info" name="b106" accept="application/vnd.ms-excel">
 				   			<input type="submit" name="next" value="Excel批量导入"
 			                formaction="<%=path%>/SecAddByExcel.com" class="btn btn-info"
 			                formnovalidate="formnovalidate">

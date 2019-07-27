@@ -3,7 +3,9 @@ package edu.whu.system.tools;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +21,10 @@ public class News extends JdbcServicesSupport
 		
 		String title = "答辩时间通知";
 		String text = "新的答辩时间已发布,请参与答辩的老师尽快安排自己的空闲时间";
-		int idlist[] = {1,2,5,6,8,9};
+		String idlist[] = {"1","2","5","6","8","9"};
 		try 
 		{
-			sendNews(title, text, idlist);
+			sendNews(title, text, "alluser");
 		} catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
@@ -61,14 +63,19 @@ public class News extends JdbcServicesSupport
 			String sql = "select uid from u_r_relation where u_r_state=1 and rid='2'";
 			lists= createList(sql);
 		}
-		else if(idlist[0].toString()=="allexp")
+		else if(idlist[0].toString()=="alljexp")
 		{
-			String sql = "select uid from u_r_relation where u_r_state=1  and rid='3'";
+			String sql = "select uid from u_r_relation where u_r_state=1  and rid='4'";
+			lists= createList(sql);
+		}
+		else if(idlist[0].toString()=="alldexp")
+		{
+			String sql = "select uid from u_r_relation where u_r_state=1  and rid='5'";
 			lists= createList(sql);
 		}
 		else if(idlist[0].toString()=="allsec")
 		{
-			String sql = "select uid from u_r_relation where u_r_state=1  and rid='5'";
+			String sql = "select uid from u_r_relation where u_r_state=1  and rid='3'";
 			lists= createList(sql);
 		}
 		else 
@@ -82,13 +89,18 @@ public class News extends JdbcServicesSupport
 			}
 			lists = dtos;
 		}
+		Date date = new Date();  
+	       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	       String dateStr = format.format(date);
 			for(Map<String, String> idmap:lists) 
 			{
-				String sql = "insert into b05(uid, b502,b503) values(?,?,?)";
+				String sql = "insert into b05 (uid,b502,b503,b504,b505) values (?,?,?,?,?);";
 				Object args[]= {
 					idmap.get("uid"),
 					title,
-					text
+					text,
+					dateStr,
+					"0"
 				};
 				//1.定义JDBC接口变量
 				PreparedStatement pstm=null;

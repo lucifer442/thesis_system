@@ -54,9 +54,9 @@
 							<td>标题</td>
 							<td colspan="2">${dataMap.b102}</td>
 						</tr>
-						<tr>
+						<tr height="74">
 							<td>摘要</td>
-							<td colspan="2">${dataMap.b103}</td>
+							<td colspan="2" width="500" align="left">&#12288;&#12288;${dataMap.b103}</td>
 						</tr>
 						<tr>
 							<td>关键字</td>
@@ -95,6 +95,7 @@
 								formaction="<%=path%>/exam_Qualified.html">通过</button>
 								<button class="btn btn-info" type="submit" name="b108" value="2" value=>不通过</button>
 								<input type="hidden" name="b101" value="${dataMap.b101}">
+								<input type="hidden" name="uid1" value="${dataMap.uid1}">
 							</td>
 						</tr>
 						<tr><td colspan="3">${msg }</td></tr>

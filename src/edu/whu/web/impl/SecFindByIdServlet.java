@@ -8,6 +8,7 @@ public class SecFindByIdServlet extends AdminControllerSupport
 	public String execute() throws Exception 
 	{
 		this.queryByID();
+		this.query();
 		return "secAddManage";
 	}
 }

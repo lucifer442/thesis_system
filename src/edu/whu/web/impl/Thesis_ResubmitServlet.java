@@ -140,6 +140,7 @@ public class Thesis_ResubmitServlet extends HttpServlet
             Map<String,String> dataMap=b01ImplServices.modify(dto);
     		if(dataMap!=null)
     		{
+    			request.setAttribute("msg","文件上传成功!");
     			request.setAttribute("dataMap",dataMap);
     		}
     		else 

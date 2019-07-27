@@ -31,22 +31,6 @@
        	   }
        }
    }
-   //按钮loading效果
-   $(function()
-   {
-       $(".btn").click(function(){
-           $(this).button('loading').delay(10).queue(function() {
-           });
-       });
-   });
-   //激活批量删除按钮
-   var count=0;
-   function onSelect(vState)
-   {
-	   vState?count++:count--;
-	   var vDel=document.getElementById("del");
-	   vDel.disabled=(count==0);
-   }
    //单一实例查询
    function onEdit(vuid)
    {
@@ -61,50 +45,6 @@
  	 vform.action="<%=path%>/secDelById.html?uid="+vuid;
  	 vform.submit();
    }
-   //全选/全不选操作
-   function setAllNo()
-   {
-       var box = document.getElementById("allAndNotAll");
-       var boxes = document.getElementsByName("idList");
-       if(box.checked == false)
-       {//全不选
-           for (var i = 0; i < boxes.length; i++) 
-           {
-        	   if(boxes[i].checked==true)
-       		   {
-        		   onSelect(false);
-       		   }
-        	   boxes[i].checked = false;
-           }
-       }
-       else
-       {//全选
-           for (var i = 0; i < boxes.length; i++) 
-           {
-        	   if(boxes[i].checked==false)
-		       {
-                   onSelect(true);	   
-		       }
-        	   boxes[i].checked = true;
-           }
-       }
-   }
-   
-   function toggle(targetId) 
-   {
-	   if (document.getElementById)
-	   {
-		   target=document.getElementById(targetId);
-		   if ( target.style.display=="none") 
-		   {
-			   target.style.display=""; 
-		   } 
-		   else
-		   {
-			   target.style.display="none";
-		   }
-	   }
-   }
    </script>
 </head>
 <body>
@@ -117,10 +57,9 @@
 		   <form id="secQueryForm" class="secQueryForm" action="<%=path%>/secQuery.html" method="post">
 		      <!-- 数据迭代区域 -->
 		      <table id="table" class="table">
-		      	 <caption>秘书管理<hr></caption>
+		      	 <caption>秘书管理</caption>
 		         <thead>
 		         	<tr>
-		            <td><input type="checkBox" id="allAndNotAll" onclick="setAllNo()"></td>
 		            <td>序号</td>
 		            <td>姓名</td>
 		            <td>所属单位</td>
@@ -129,20 +68,34 @@
 		            <td>身份证号码</td>
 		            <td>手机号码</td>
 		            <td>邮件</td>
+		            <td>角色</td>
 		            <td></td>
 		            <td></td>
 		         </tr>
 		         </thead>
 		         <tbody>
 		         	<c:choose>
-				        <c:when test="${dataList!=null }">
+				        <c:when test="${empty dataList}">
+				       	 <c:forEach begin="1" step="1" end="15">
+				              <tr>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				                 <td></td>
+				              </tr>
+				           </c:forEach>
+				        </c:when>
+				        <c:otherwise>
 				        <!-- 显示查询到的数据 -->
 				           <c:forEach items="${dataList }" var="dataMap" varStatus="vs">
 				              <tr>
-				                 <td>
-				                    <input type="checkBox" name="idList" value="${dataMap.uid }"
-				                    onclick="onSelect(this.checked)">
-				                 </td>
 				                 <td>${vs.count }</td>
 			                     <td>${dataMap.name }</td>
 							     <td>${dataMap.a601 }</td>
@@ -151,11 +104,12 @@
 							     <td>${dataMap.a605 }</td>
 							     <td>${dataMap.a608 }</td>
 							     <td>${dataMap.a609 }</td>
-							     <td>
-							        <a href="#" onclick="onDel('${dataMap.uid}')">删除</a>
-							     </td>
+							     <td>${dataMap.roles }</td>
 							     <td>
 							        <a href="#" onclick="onEdit('${dataMap.uid}')">修改</a>
+							     </td>
+							     <td>
+							        <a href="#" onclick="onDel('${dataMap.uid}')">删除</a>
 							     </td>
 				              </tr>
 				           </c:forEach>
@@ -176,23 +130,6 @@
 				                 <td></td>
 					          </tr>
 				           </c:forEach>
-				        </c:when>
-				        <c:otherwise>
-				           <c:forEach begin="1" step="1" end="15">
-				              <tr>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				                 <td></td>
-				              </tr>
-				           </c:forEach>
 				        </c:otherwise>
 				     </c:choose>
 				     <tr>
@@ -201,8 +138,6 @@
 				           formaction="<%=path%>/secQuery.html">
 				           <input type="submit" name="next" value="添加秘书" class="btn btn-info"
 				           formaction="<%=path%>/secAddManage.jsp">
-			               <input type="submit" id="del" name="next" value="批量删除"
-			               disabled="disabled" class="btn btn-info" formaction="<%=path%>/secDel.html">
 			            </td>
 				     </tr>
 				     <tr>

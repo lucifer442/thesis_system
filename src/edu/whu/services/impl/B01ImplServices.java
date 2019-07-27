@@ -226,16 +226,23 @@ public class B01ImplServices extends JdbcServicesSupport
     	return this.queryForMap(sql.toString(), this.getFromDto("b101"));
 	}
 	
+	/**
+	 * 提交论文返回数据
+	 * @param object
+	 * @return
+	 * @throws Exception
+	 */
 	public Map<String, String> queryByUID(Object object) throws Exception
 	{
     	StringBuilder sql=new StringBuilder()
 				.append("select x.b101,x.uid1,x.uid2,x.b102,x.b103,")
-				.append("       x.b104,x.b105,x.b106,")
+				.append("       x.b104,x.b105,x.b106,u.`name`,")
 				.append("       a.fvalue b107,b.fvalue b108,c.fvalue b109")
-				.append("  from syscode a,syscode b,syscode c,b01 x")
+				.append("  from syscode a,syscode b,syscode c,b01 x,`user` u")
 				.append(" where x.b107=a.fcode and a.fname='b107'")
 				.append("   and x.b108=b.fcode and b.fname='b108'")
 				.append("   and x.b109=c.fcode and c.fname='b109'")
+				.append("   and u.uid=x.uid1")
     			.append("   and uid1=?")
     			;
 
@@ -309,7 +316,14 @@ public class B01ImplServices extends JdbcServicesSupport
     	};
 		this.executeUpdate(sql.toString(), args);	
 		
-		return queryByUID(dto.get("uid"));
+		Map<String, String> map=queryByUID(dto.get("uid"));
+		
+		Object object[]= {
+				map.get("name")+"的论文已提交",
+				map.get("name")+"的论文已提交,<a href='thesis_Details_Te.html?b101="+map.get("b101")+"'>点击查看详情</a>"
+		};
+		this.sendMessage(map.get("uid2").toString(), object);
+		return map;
 	}
 	
 	/**
@@ -335,7 +349,14 @@ public class B01ImplServices extends JdbcServicesSupport
 		};
 		this.executeUpdate(sql.toString(), args);	
 		
-		return queryByID();
+		Map<String, String> map=queryByUID(dto.get("uid"));
+		
+		Object object[]= {
+				map.get("name")+"的论文已重新提交",
+				map.get("name")+"的论文已重新提交,<a href='thesis_Details_Te.html?b101="+map.get("b101")+"'>点击查看详情</a>"
+		};
+		this.sendMessage(map.get("uid2").toString(), object);
+		return map;
 	}
 	
 	/**
@@ -364,6 +385,11 @@ public class B01ImplServices extends JdbcServicesSupport
 		
 		this.executeUpdate(sql.toString(), paramList.toArray());
 		
+		Object object[]= {
+				"论文评审结果",
+				"你的<a href='studentThesis.jsp'>论文评审结果</a>出来了，快去看看吧"
+		};
+		this.sendMessage(this.getFromDto("uid1").toString(), object);
 		B02ImplServices b02ImplServices = new B02ImplServices();
 		return b02ImplServices.query(this.getFromDto("b101"));
 	}
@@ -387,6 +413,11 @@ public class B01ImplServices extends JdbcServicesSupport
 		};
 		this.executeUpdate(sql.toString(), objects);
 		
+		Object object[]= {
+				"论文检查结果",
+				"你的<a href='studentThesis.jsp'>论文检查结果</a>出来了，快去看看吧"
+		};
+		this.sendMessage(this.getFromDto("uid1").toString(), object);
 		return this.queryByID();
 	}
 	

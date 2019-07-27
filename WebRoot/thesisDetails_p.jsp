@@ -48,16 +48,16 @@
 					<thead></thead>
 					<tbody>
 						<tr>
-					        <th>学生姓名</th>
+					        <td>学生姓名</td>
 					        <td colspan="2">${dataMap.name}</td>
 					    </tr>
 						<tr>
 							<td>标题</td>
 							<td colspan="2">${dataMap.b102}</td>
 						</tr>
-						<tr>
+						<tr height="74">
 							<td>摘要</td>
-							<td colspan="2">${dataMap.b103}</td>
+							<td colspan="2" width="500" align="left">&#12288;&#12288;${dataMap.b103}</td>
 						</tr>
 						<tr>
 							<td>关键字</td>

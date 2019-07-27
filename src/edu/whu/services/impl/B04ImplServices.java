@@ -15,7 +15,6 @@ public class B04ImplServices extends JdbcServicesSupport
     			.append("   and c.fcode=x.b410 and c.fname='b410'")
     			.append("   and x.b101=?")
     			;
-
     	return this.queryForMap(sql.toString(), this.getFromDto("b101"));
 	}
 }

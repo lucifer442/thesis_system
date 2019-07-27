@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/message")
+@WebServlet(urlPatterns = "/message",name="MessageServlet")
 public class MessageServlet extends BaseServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException

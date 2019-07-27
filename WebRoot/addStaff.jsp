@@ -13,6 +13,23 @@
 	//循环更改表格tr标签的背景颜色
 	window.onload=function()
 	{
+		var role= document.getElementById("roles").value;
+		if(role.indexOf("4")==-1)
+		{
+			$("input:checkbox[value='4']").attr('checked',false);
+		}
+		if(role.indexOf("5")==-1)
+		{
+			$("input:checkbox[value='5']").attr('checked',false);
+		}
+		if(role.indexOf("2")==-1)
+		{
+			$("input:checkbox[value='2']").attr('checked',false);
+		}
+		if(role.indexOf("7")==-1)
+		{
+			$("input:checkbox[value='7']").attr('checked',false);
+		}
 		var item= document.getElementById("table");
 		var tbody=item.getElementsByTagName("tbody")[0];
 		var trs= tbody.getElementsByTagName("tr");
@@ -30,8 +47,16 @@
 			{
 				trs[i].style.background="#FFFFFF";
        		}
+		}
+	}
+	function onSelect()
+	{
+		if($("input[class='roles']:checked").length == 0)
+		{
+		     return false;
 		}  
 	}
+	
 	</script>
 </head>
 
@@ -44,7 +69,7 @@
 		<div class="col-md-10 column">
 			<form action="<%=path%>/addExp.html" method="post">
 				<table class="table" id="table">
-					<caption>专家${empty dataMap.uid?'添加':'修改' }<hr></caption>
+					<caption>专家${empty dataMap.uid?'添加':'修改' }</caption>
 					<tbody class="addStaff-tbody">
 						<tr>
 							<td></td>
@@ -99,7 +124,7 @@
 							<td></td>
 							<td>职称</td>
 							<td>
-								<e:radio name="a604" value="教授:1,副教授:2,其他:3" defval="${dataMap.a604 }" />
+								<e:radio name="a604" value="教授:1,副教授:2,讲师:3" defval="${dataMap.a604 }" />
 							</td>
 							<td></td>
 						</tr>
@@ -153,7 +178,10 @@
 							<td></td>
 							<td>专家角色</td>
 							<td>
-								<e:groupbox name="roles" value="导师:2,专家:7,评审专家:4,答辩专家:5" defval="${dataMap.roles }" />
+								<input type="checkbox" checked="checked" class="roles" name="roles" onclick="return onSelect();" id="role1" value="2"/>导师
+								<input type="checkbox" checked="checked" class="roles" name="roles" onclick="return onSelect();" id="role2" value="7"/>专家
+								<input type="checkbox" checked="checked" class="roles" name="roles" id="role3" onclick="return false;" value="4"/>评审专家
+								<input type="checkbox" checked="checked" class="roles" name="roles" id="role4" onclick="return false;" value="5"/>答辩专家
 							</td>
 							<td></td>
 						</tr>
@@ -162,13 +190,14 @@
 								<input type="submit" name="next" value="${empty dataMap.uid?'添加':'修改' }" class="btn btn-info"
 								formaction="<%=path%>/${empty dataMap.uid?'add':'modify' }Staff.html">
 								<input type="submit" name="next" value="返回" class="btn btn-info"
-								formaction="<%=path%>/queryStaff.jsp" formnovalidate="formnovalidate">
+								formaction="<%=path%>/queryStaff.html" formnovalidate="formnovalidate">
 							</td>
 						</tr>
 						<tr><td colspan="5">${msg }</td></tr>
 					</tbody>
 				</table>
 				<input type="hidden" name="hid" value="${dataMap.uid }">
+				<input type="hidden" name="roleList" id="roles" value="${dataMap.roles }">
 				<e:hidden name="qname"/>
 				<e:hidden name="qa602"/>
 				<e:hidden name="qa601"/>

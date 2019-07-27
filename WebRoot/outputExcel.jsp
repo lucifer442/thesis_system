@@ -36,10 +36,15 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div id="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#top"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
-			<form id="outputExcelForm" class="outputExcelForm" method="post" action="FinancialQuery.html">
+			<form id="outputExcelForm" class="outputExcelForm" method="post" action="<%=path%>/FinancialAdd.html">
 		      <table id="table" class="table">
 		      	<caption class="outputExcel-caption">财务报表
 		      		<div class="outputExcel-list">
@@ -122,7 +127,8 @@
 				    </c:choose>
 				    <tr>
 						<td colspan="8">
-						    <input type="submit" class="btn btn-info" name="next" value="查询财务报表">
+						    <input type="submit" class="btn btn-info" name="next" value="生成财务数据">
+						    <input type="submit" class="btn btn-info" name="next" value="查询" formaction="<%=path%>/FinancialQuery.html">
 						</td>
 					</tr>
 					<tr>
@@ -135,6 +141,7 @@
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-12 column">
+		<div id="under"></div>
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>
 	</div>

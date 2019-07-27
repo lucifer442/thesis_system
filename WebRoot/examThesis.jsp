@@ -12,7 +12,7 @@
 	<script>
 	//循环更改表格tr标签的背景颜色
 	window.onload=function()
-	{
+	{	
 		var item= document.getElementById("mytable");
 		var tbody=item.getElementsByTagName("tbody")[0];
 		var trs= tbody.getElementsByTagName("tr");
@@ -31,6 +31,15 @@
 				trs[i].style.background="#FFFFFF";
        		}
 		}
+
+		var uid = document.getElementById("uid");
+		var msg = "${msg}";
+		if(uid==null&&msg=="")
+		{
+			var vform = document.getElementById("myform");
+			vform.action="<%=path%>/exam_Thesis.html";
+			vform.submit();
+		}
 		var select = document.getElementById("myselect");
 		var selectID = localStorage.getItem('selectID');
 		for (var i = 0; i < select.options.length; i++) {
@@ -40,38 +49,20 @@
 			}
 		}
 		localStorage.removeItem('selectID');
-		
-		var dataList = "${dataList}";
-		var msg = "${msg}";
-		if(dataList==""&&msg=="")
-		{
-			var vform = document.getElementById("myform");
-			vform.action="<%=path%>/exam_Thesis.html";
-			vform.submit();
-		}
 	}
-	function onDetails(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/thesis_Details_Ex.html?b101="+b101;
-		 vform.submit();
-	}
-	function onExam(b101)
-	{
-		 var vform = document.getElementById("myform");
-		 vform.action="<%=path%>/view_Review.html?b101="+b101;
-		 vform.submit();
-	}
-	function onSelect()
-	{
-		var selectID = document.getElementById("myselect").value;
-		localStorage.setItem('selectID',selectID);
-		
-		var vform = document.getElementById("myform");
-		vform.action="<%=path%>/exam_Thesis.html";
-			vform.submit();
 
-	}
+</script>
+<script type="text/javascript">
+function onSelect()
+{
+	var selectID = document.getElementById("myselect").value;
+	localStorage.setItem('selectID',selectID);
+	
+	var vform = document.getElementById("myform");
+	vform.action="<%=path%>/exam_Thesis.html";
+		vform.submit();
+
+}
 </script>
 </head>
 
@@ -79,7 +70,12 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-2 column">
+			<div id="top"></div>
 			<jsp:include page="menu.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
+			<div class="tp" id="tp">
+				<div id="tp1"><a href="#top"><img alt="" src="./images/up.png" class="footer-img" width="50px" height="50px"></a></div>
+				<div id="tp2"><a href="#under"><img alt="" src="./images/down.png" class="footer-img" width="50px" height="50px"></a></div>
+			</div>
 		</div>
 		<div class="col-md-10 column">
 			<form id="myform" action="" method="post">
@@ -93,6 +89,7 @@
 					<caption>学生论文</caption>
 					<thead>
 						<tr>
+						    <th>学生姓名</th>
 							<th>标题</th>
 							<th>检查结果</th>
 							<th>评审结果</th>
@@ -104,8 +101,8 @@
 					<c:when test="${dataList!=null}">
 					<c:forEach var="U" items="${dataList}">
 						<tr>
-						    <td>${U.name}</td>
-							<td><a href="#" onclick="onDetails('${U.b101}')">${U.b102}</a></td>
+						    <td>${U.name}<input id="uid" type="hidden"></td>
+							<td><a href="<%=path%>/thesis_Details_Ex.html?b101=${U.b101}">${U.b102}</a></td>
 							<td>${U.b107}</td>
 							<td>
 							<c:choose>
@@ -113,12 +110,12 @@
 								<p>${U.b108}</p>
 							</c:when>
 							<c:otherwise>
-								<a href="#" onclick="onExam('${U.b101}')">${U.b108}</a>
+								<a href="<%=path%>/view_Review.html?b101=${U.b101}">${U.b108}</a>
 							</c:otherwise>
 							</c:choose>
 							</td>
 							<td>
-								<a class="btn btn-info" href="<%=path%>/view_Thesis.html?b101=${dataMap.b101}" target="_blank">在线阅读</a>
+								<a class="btn btn-info" href="<%=path%>/view_Thesis.html?b101=${U.b101}" target="_blank">在线阅读</a>
 							</td>
 						</tr>
 					</c:forEach>
@@ -134,7 +131,7 @@
 	                </c:forEach>
 	                </c:when>
 	                <c:otherwise>
-	                <c:forEach begin="1" step="1" end="10">
+	                <c:forEach begin="1" step="1" end="15">
 	                	<tr>
 			                <td></td>
 			                <td></td>
@@ -145,7 +142,7 @@
 	                </c:forEach>
 			        </c:otherwise>
 					</c:choose>
-					<tr><td colspan="4">${msg }</td></tr>
+					<tr><td colspan="5">${msg }</td></tr>
 				</tbody>
 				</table>
 				<input type="hidden" name="uid" value="${dataMap.uid}">
@@ -153,6 +150,7 @@
 		</div>
 	</div>
 	<div class="row clearfix">
+		<div id="under"></div>
 		<div class="col-md-12 column">
 		<jsp:include page="footer.jsp" flush="true"><jsp:param value="" name=""/></jsp:include>
 		</div>

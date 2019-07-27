@@ -110,7 +110,7 @@
 						</tr>
 						<!-- 数据迭代区 -->
 						<c:choose>
-						<c:when test="${dataList!=null }">
+						<c:when test="${not empty dataList}">
 						<!-- 显示实际查询到的数据 -->
 						<c:forEach items="${dataList }" var="ins" varStatus="vs">	    	   	  
 						<c:forEach items="${ins.a201 }" var="index" varStatus="vs">
@@ -137,7 +137,7 @@
 						<c:choose >
 						<c:when test="${n != '49' }">
 							<td> </td>
-							</c:when>       
+						</c:when>       
 						<c:otherwise>
 							<td>√</td>
 						</c:otherwise>
@@ -152,7 +152,7 @@
 						<c:forEach items="${ins.a504.toCharArray() }" var="n" varStatus="vs">
 						<c:choose >
 						<c:when test="${n != '49' }">
-							<td> </td>
+							<td></td>
 							</c:when>
 						<c:otherwise>
 							<td>√</td>
@@ -162,11 +162,80 @@
 						</tr>
 						</c:forEach>
 						</c:forEach>
+						<c:forEach begin="${fn:length(dataList)+1 }" step="1" end="15">
+							<tr>
+								<td></td><td></td>
+							<c:if test="${not empty applicationScope.date1}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date2}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date3}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date4}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date5}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date6}">
+								<td></td>
+								<td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date7}">
+								<td></td>
+								<td></td>
+							</c:if>
+							</tr>
+						</c:forEach>
 						</c:when>
+						<c:otherwise>
+							<c:forEach begin="1" step="1" end="15">
+							<tr>
+								<td></td><td></td>
+							<c:if test="${not empty applicationScope.date1}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date2}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date3}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date4}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date5}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date6}">
+								<td></td><td></td>
+							</c:if>
+							<c:if test="${not empty applicationScope.date7}">
+								<td></td><td></td>
+							</c:if>
+							</tr>
+							</c:forEach>
+						</c:otherwise>
 						</c:choose>
+						<c:if test="${empty applicationScope.date1}">
+						<tr>
+							<td colspan="3"><input type="submit" class="btn btn-info" name="next" value="查询"></td>
+						</tr>
+						</c:if>
+						<c:if test="${not empty applicationScope.date1}">
 						<tr>
 							<td colspan="16"><input type="submit" class="btn btn-info" name="next" value="查询"></td>
 						</tr>
+						</c:if>
+						
 					</tbody>
 				</table>
 			</form>

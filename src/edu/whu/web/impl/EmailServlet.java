@@ -7,8 +7,8 @@ public class EmailServlet extends StaffControllerSupport {
 	@Override
 	public String execute() throws Exception
 	{
-		this.update("email", "É¾³ý");
-		this.queryByID();
-		return "queryExp";
+		this.update("email");
+		this.query();
+		return "queryStaff";
 	}
 }
